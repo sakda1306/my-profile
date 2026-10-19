@@ -27,7 +27,7 @@ export type SectionItemRow = {
 
 type ItemType = "gallery" | "cards" | "timeline";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 function ItemForm({
   sectionId,

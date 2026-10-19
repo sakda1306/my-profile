@@ -18,7 +18,7 @@ export default async function SkillsPage() {
 
   return (
     <main className="space-y-8">
-      <h1 className="text-2xl font-semibold">ความสามารถ</h1>
+      <h1 className="text-3xl font-black tracking-tight md:text-4xl">ความสามารถ</h1>
       <section className="space-y-3">
         <h2 className="text-lg font-medium">เพิ่มความสามารถ</h2>
         <SkillForm translateEnabled={translateEnabled} />

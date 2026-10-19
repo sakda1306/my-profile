@@ -21,7 +21,7 @@ export default async function CertificatesPage() {
   return (
     <main className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">ใบประกาศ</h1>
+        <h1 className="text-3xl font-black tracking-tight md:text-4xl">ใบประกาศ</h1>
         <Link href="/admin/certificates/new">เพิ่มใบประกาศ</Link>
       </div>
       {items.length === 0 ? (

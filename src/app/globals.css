@@ -2,6 +2,7 @@
 @import "../styles/tokens.css";
 @import "../styles/rich-text.css";
 @import "../styles/poster.css";
+@import "../styles/admin-panel.css";
 
 body {
   background: var(--color-bg);

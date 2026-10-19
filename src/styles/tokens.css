@@ -23,7 +23,7 @@
   --color-ice: #d7e2ea;
   --color-paper: #ffffff;
   --color-ink: #0c0c0c;
-  --font-sans: var(--font-noto-sans-thai), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-kanit), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-sans);
   --radius-card: 0.75rem;
   --radius-poster: 1.375rem;
@@ -31,7 +31,7 @@
   --shadow-poster: 0 30px 80px rgb(0 0 0 / 0.55);
 }
 
-/* Public site: dark blue "night" theme. Same token names, so every component follows. */
+/* Public site and admin: dark blue "night" theme. Same token names, so every component follows. */
 [data-theme="night"] {
   --color-bg: #070b22;
   --color-fg: #eef1ff;

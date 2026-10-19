@@ -28,7 +28,7 @@ export function PostStatusButton({ id, status }: { id: string; status: "draft" |
         type="button"
         onClick={toggle}
         disabled={pending}
-        className="rounded-card border border-border px-3 py-1 text-sm text-fg disabled:opacity-50"
+        className="rounded-full border border-border px-3.5 py-1 transition hover:bg-ghost text-sm text-fg disabled:opacity-50"
       >
         {pending ? "กำลังบันทึก..." : next === "published" ? "เผยแพร่" : "ยกเลิกการเผยแพร่"}
       </button>

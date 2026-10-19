@@ -36,7 +36,7 @@ function Btn({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={active ?? false}
-      className={`rounded-card border border-border px-2 py-1 text-sm disabled:opacity-50 ${
+      className={`rounded-full border border-border px-2.5 py-1 transition hover:bg-ghost text-sm disabled:opacity-50 ${
         active ? "bg-accent text-on-accent" : "bg-bg text-fg"
       }`}
     >
@@ -146,7 +146,7 @@ export function TiptapEditor({ value, onChange, name, folder = "posts", label }:
     editorProps: {
       attributes: {
         class:
-          "rich-text min-h-48 rounded-card border border-border bg-bg px-3 py-2 text-fg focus:outline-none",
+          "rich-text min-h-48 rounded-xl border border-border bg-night-deep/60 px-4 py-3 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25",
         ...(label ? { "aria-label": label } : {}),
       },
     },

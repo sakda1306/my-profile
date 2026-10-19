@@ -31,11 +31,11 @@ export function ActionForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-card bg-accent px-4 py-2 text-on-accent disabled:opacity-50"
+          className="rounded-full bg-accent px-6 py-2.5 font-semibold text-on-accent shadow-[0_8px_24px_rgb(255_138_43/0.25)] transition hover:brightness-110 disabled:opacity-50"
         >
           {pending ? "กำลังบันทึก..." : submitLabel}
         </button>
-        {result?.ok ? <p role="status">บันทึกแล้ว</p> : null}
+        {result?.ok ? <p role="status" className="text-ember-hot">บันทึกแล้ว</p> : null}
         {result && !result.ok ? (
           <p role="alert" className="text-danger">
             {result.error}

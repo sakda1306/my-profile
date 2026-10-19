@@ -15,7 +15,7 @@ export type ProjectImageItem = {
   caption_en: string;
 };
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-1 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3 py-1.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 function Caption({ item }: { item: ProjectImageItem }) {
   const [th, setTh] = useState(item.caption_th);

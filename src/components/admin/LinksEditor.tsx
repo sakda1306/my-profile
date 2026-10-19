@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export type LinkRow = { label: string; url: string; icon: string };
 const MAX = 10;
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 export function LinksEditor({ name, defaultValue }: { name: string; defaultValue: LinkRow[] }) {
   const [rows, setRows] = useState<LinkRow[]>(defaultValue);
@@ -50,7 +50,7 @@ export function LinksEditor({ name, defaultValue }: { name: string; defaultValue
         type="button"
         disabled={rows.length >= MAX}
         onClick={() => setRows((x) => [...x, { label: "", url: "", icon: "" }])}
-        className="rounded-card border border-border px-3 py-1 text-sm disabled:opacity-50"
+        className="rounded-full border border-border px-3.5 py-1 transition hover:bg-ghost text-sm disabled:opacity-50"
       >
         เพิ่มลิงก์
       </button>
