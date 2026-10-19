@@ -41,7 +41,9 @@ describe("translateStrings", () => {
       "https://generativelanguage.googleapis.com/v1beta/models/test-model:generateContent",
     );
     expect(init.headers["x-goog-api-key"]).toBe("test-key");
-    expect(JSON.parse(init.body).generationConfig.responseMimeType).toBe("application/json");
+    const cfg = JSON.parse(init.body).generationConfig;
+    expect(cfg.responseMimeType).toBe("application/json");
+    expect(cfg.thinkingConfig.thinkingBudget).toBe(0);
   });
 
   it("falls back to the default model when GEMINI_MODEL is empty", async () => {

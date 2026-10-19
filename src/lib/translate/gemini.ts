@@ -16,7 +16,7 @@ export class QuotaError extends TranslateError {
 }
 
 const DEFAULT_MODEL = "gemini-flash-latest";
-const TIMEOUT_MS = 30_000;
+const TIMEOUT_MS = 60_000;
 const LANGUAGE: Record<Locale, string> = { th: "Thai", en: "English" };
 
 export function isTranslateEnabled(): boolean {
@@ -53,7 +53,10 @@ export async function translateStrings(
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify({
         contents: [{ parts: [{ text: buildPrompt(texts, from, to) }] }],
-        generationConfig: { responseMimeType: "application/json" },
+        generationConfig: {
+          responseMimeType: "application/json",
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
