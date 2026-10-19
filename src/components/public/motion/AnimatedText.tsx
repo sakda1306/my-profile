@@ -17,7 +17,7 @@ function Char({
   return (
     <span className="relative">
       <span className="invisible">{char}</span>
-      <motion.span className="absolute inset-0 motion-reduce:!opacity-100" style={{ opacity }}>
+      <motion.span data-fade="" className="absolute inset-0 motion-reduce:!opacity-100" style={{ opacity }}>
         {char}
       </motion.span>
     </span>

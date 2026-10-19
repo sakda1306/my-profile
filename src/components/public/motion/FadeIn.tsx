@@ -44,6 +44,7 @@ export function FadeIn({
   const M = tags[as];
   return (
     <M
+      data-fade=""
       className={className}
       style={style}
       initial={{ opacity: 0, x, y }}
