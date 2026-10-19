@@ -7,8 +7,12 @@
 }
 
 /* The poster photo is a cut-out (transparent background): fade only its bottom edge into the
-   poster and give it a soft blue rim light. */
+   poster and give it a soft blue rim light. A mask clips to the element's box, so the side
+   padding (outside the width classes, hence content-box) leaves room for the glow to fade out
+   instead of ending in a hard vertical line beside the body. */
 .poster-photo {
+  box-sizing: content-box;
+  padding-inline: 5rem;
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
 }

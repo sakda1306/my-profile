@@ -8,7 +8,7 @@ import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { updateSection } from "../actions";
 import { SectionItems } from "../SectionItems";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const SYSTEM_NOTE: Record<string, string> = {
@@ -55,7 +55,7 @@ export default async function SectionPage({ params }: { params: Promise<{ id: st
       <Link href="/admin/sections" className="text-sm text-muted">
         กลับไปรายการ
       </Link>
-      <h1 className="text-2xl font-semibold">แก้ไขหมวด</h1>
+      <h1 className="text-3xl font-black tracking-tight md:text-4xl">แก้ไขหมวด</h1>
       {SYSTEM_NOTE[section.type] ? (
         <p className="rounded-card border border-border p-3 text-sm text-muted">
           {SYSTEM_NOTE[section.type]}

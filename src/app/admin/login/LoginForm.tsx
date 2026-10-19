@@ -11,35 +11,33 @@ export function LoginForm() {
   );
   return (
     <form action={action} className="flex flex-col gap-4">
-      <label className="flex flex-col gap-1">
+      <label className="flex flex-col gap-1.5 text-sm text-muted">
         อีเมล
         <input
           name="email"
           type="email"
           required
           autoComplete="email"
-          className="border border-current/30 rounded px-3 py-2"
         />
       </label>
-      <label className="flex flex-col gap-1">
+      <label className="flex flex-col gap-1.5 text-sm text-muted">
         รหัสผ่าน
         <input
           name="password"
           type="password"
           required
           autoComplete="current-password"
-          className="border border-current/30 rounded px-3 py-2"
         />
       </label>
       {state && !state.ok ? (
-        <p role="alert" className="text-sm">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={pending}
-        className="border border-current rounded px-3 py-2"
+        className="mt-2 rounded-full bg-accent px-6 py-2.5 font-semibold text-on-accent shadow-[0_8px_24px_rgb(255_138_43/0.25)] transition hover:brightness-110 disabled:opacity-50"
       >
         {pending ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
       </button>

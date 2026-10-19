@@ -22,7 +22,7 @@ export default async function PostsPage() {
   return (
     <main className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">บทความ</h1>
+        <h1 className="text-3xl font-black tracking-tight md:text-4xl">บทความ</h1>
         <Link href="/admin/posts/new">เขียนบทความ</Link>
       </div>
       {items.length === 0 ? <p className="text-muted">ยังไม่มีบทความ</p> : <PostList items={items} />}

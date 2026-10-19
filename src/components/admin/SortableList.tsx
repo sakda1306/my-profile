@@ -35,7 +35,7 @@ function Row({ id, children }: { id: string; children: ReactNode }) {
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="flex items-center gap-3 rounded-card border border-border bg-surface p-3"
+      className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:border-smoke/40"
     >
       <button
         type="button"

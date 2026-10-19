@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { saveProfile } from "./actions";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 // Every admin page reads the session per request, so navigations block on the server.
 export const instant = false;
@@ -20,7 +20,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="space-y-6">
-      <h1 className="text-2xl font-semibold">โปรไฟล์</h1>
+      <h1 className="text-3xl font-black tracking-tight md:text-4xl">โปรไฟล์</h1>
       <ActionForm action={saveProfile}>
         <BilingualField name="full_name" label="ชื่อ-นามสกุล" translateEnabled={translateEnabled} defaultTh={p?.full_name_th} defaultEn={p?.full_name_en} />
         <BilingualField name="headline" label="คำโปรย" translateEnabled={translateEnabled} defaultTh={p?.headline_th} defaultEn={p?.headline_en} />

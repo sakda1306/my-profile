@@ -8,7 +8,7 @@ import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { ProjectForm } from "../ProjectForm";
 import { ProjectImages } from "../ProjectImages";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Every admin page reads the session per request, so navigations block on the server.
@@ -40,7 +40,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <Link href="/admin/projects" className="text-sm text-muted">
         กลับไปรายการ
       </Link>
-      <h1 className="text-2xl font-semibold">{isNew ? "เพิ่มโปรเจกต์" : "แก้ไขโปรเจกต์"}</h1>
+      <h1 className="text-3xl font-black tracking-tight md:text-4xl">{isNew ? "เพิ่มโปรเจกต์" : "แก้ไขโปรเจกต์"}</h1>
       <ProjectForm isNew={isNew}>
         <input type="hidden" name="id" value={project?.id ?? ""} />
         <BilingualField name="title" label="ชื่อโปรเจกต์" translateEnabled={translateEnabled} defaultTh={project?.title_th} defaultEn={project?.title_en} />

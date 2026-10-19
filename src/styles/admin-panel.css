@@ -1,0 +1,83 @@
+/* Admin panel base styles. In the base layer so any Tailwind utility on an element still wins. */
+@layer base {
+  [data-admin] {
+    color-scheme: dark;
+  }
+
+  [data-admin] ::selection {
+    background: rgb(255 138 43 / 0.35);
+  }
+
+  [data-admin]
+    :where(
+      input:not([type="checkbox"], [type="radio"], [type="file"], [type="hidden"], [type="color"]),
+      textarea,
+      select
+    ) {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: rgb(4 6 26 / 0.55);
+    padding: 0.6rem 0.85rem;
+    color: var(--color-fg);
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  [data-admin] :where(textarea) {
+    min-height: 6rem;
+    line-height: 1.6;
+  }
+
+  [data-admin] :where(input, textarea, select)::placeholder {
+    color: var(--color-muted);
+    opacity: 0.7;
+  }
+
+  [data-admin] :where(input, textarea, select):focus-visible {
+    border-color: var(--color-ember);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(255 138 43 / 0.25);
+  }
+
+  [data-admin] :where(select option) {
+    background: var(--color-night);
+  }
+
+  [data-admin] :where(input[type="checkbox"], input[type="radio"]) {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--color-ember);
+  }
+
+  [data-admin] :where(input[type="file"])::file-selector-button {
+    margin-right: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    padding: 0.4rem 1rem;
+    color: var(--color-fg);
+    cursor: pointer;
+  }
+
+  [data-admin] :where(button, a, summary):focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 2px;
+  }
+
+  [data-admin] :where(button:not(:disabled)) {
+    cursor: pointer;
+  }
+
+  [data-admin] :where(dialog)::backdrop {
+    background: rgb(4 6 26 / 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  [data-admin] :where(main a:not([class])) {
+    color: var(--color-ice);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

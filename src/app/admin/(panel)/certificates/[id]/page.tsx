@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { upsertCertificate } from "../actions";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Every admin page reads the session per request, so navigations block on the server.
@@ -30,7 +30,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
       <Link href="/admin/certificates" className="text-sm text-muted">
         กลับไปรายการ
       </Link>
-      <h1 className="text-2xl font-semibold">{isNew ? "เพิ่มใบประกาศ" : "แก้ไขใบประกาศ"}</h1>
+      <h1 className="text-3xl font-black tracking-tight md:text-4xl">{isNew ? "เพิ่มใบประกาศ" : "แก้ไขใบประกาศ"}</h1>
       <ActionForm action={upsertCertificate} redirectTo="/admin/certificates">
         <input type="hidden" name="id" value={cert?.id ?? ""} />
         <BilingualField name="title" label="ชื่อใบประกาศ" translateEnabled={translateEnabled} defaultTh={cert?.title_th} defaultEn={cert?.title_en} />

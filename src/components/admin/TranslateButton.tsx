@@ -50,7 +50,7 @@ export function TranslateButton({ from, to, sourceValue, targetValue, onResult, 
         type="button"
         onClick={run}
         disabled={pending || !sourceValue.trim()}
-        className="rounded-card border border-border bg-bg px-2 py-1 text-xs text-fg disabled:opacity-50"
+        className="rounded-full border border-border bg-bg px-2.5 py-1 transition hover:bg-ghost text-xs text-fg disabled:opacity-50"
       >
         {pending ? "กำลังแปล..." : `${LABEL[from]} → ${LABEL[to]}`}
       </button>

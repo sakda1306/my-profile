@@ -19,7 +19,7 @@ export function PostList({ items }: { items: PostItem[] }) {
   return (
     <ul className="space-y-2">
       {items.map((p) => (
-        <li key={p.id} className="flex flex-wrap items-center gap-3 rounded-card border border-border p-3">
+        <li key={p.id} className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-surface p-3 transition hover:border-smoke/40">
           <div className="flex-1">
             <p className="font-medium">{p.title}</p>
             <p className="text-sm text-muted">

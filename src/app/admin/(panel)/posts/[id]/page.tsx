@@ -8,7 +8,7 @@ import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { PostForm } from "../PostForm";
 import { PostStatusButton } from "../PostStatusButton";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Every admin page reads the session per request, so navigations block on the server.
@@ -32,7 +32,7 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
         กลับไปรายการ
       </Link>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-semibold">{isNew ? "เขียนบทความ" : "แก้ไขบทความ"}</h1>
+        <h1 className="text-3xl font-black tracking-tight md:text-4xl">{isNew ? "เขียนบทความ" : "แก้ไขบทความ"}</h1>
         {post ? (
           <>
             <span className="text-sm text-muted">

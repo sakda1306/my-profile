@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { CREATABLE_TYPES, TYPE_LABEL, isCreatableType } from "@/lib/admin/schemas";
 import { createSection } from "./actions";
 
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 export function AddSectionForm() {
   const router = useRouter();
@@ -63,7 +63,7 @@ export function AddSectionForm() {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-card bg-accent px-4 py-2 text-on-accent disabled:opacity-50"
+          className="rounded-full bg-accent px-6 py-2.5 font-semibold text-on-accent shadow-[0_8px_24px_rgb(255_138_43/0.25)] transition hover:brightness-110 disabled:opacity-50"
         >
           {pending ? "กำลังเพิ่ม..." : "เพิ่มหมวด"}
         </button>

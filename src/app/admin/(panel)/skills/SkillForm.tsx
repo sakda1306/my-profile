@@ -6,7 +6,7 @@ import type { Database } from "@/lib/supabase/database.types";
 import { upsertSkill } from "./actions";
 
 type Skill = Database["public"]["Tables"]["skills"]["Row"];
-const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
+const input = "w-full rounded-xl border border-border bg-night-deep/60 px-3.5 py-2.5 text-fg transition focus:border-ember focus:outline-none focus:ring-3 focus:ring-ember/25";
 
 export function SkillForm({
   skill,
