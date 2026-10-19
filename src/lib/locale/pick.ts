@@ -46,3 +46,11 @@ export function hasOwnContent(
 ): boolean {
   return fields.every((f) => !isEmptyValue(row[`${f}_${locale}`]));
 }
+
+// A post counts as "own content" in a locale only with both title and body there.
+// Canonical, sitemap and the index badges all share this rule.
+export const POST_OWN_FIELDS = ["title", "content"];
+
+export function isPostFallback(row: Record<string, unknown>, locale: Locale): boolean {
+  return !hasOwnContent(row, POST_OWN_FIELDS, locale);
+}

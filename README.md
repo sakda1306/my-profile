@@ -6,13 +6,13 @@
 
 ## สิ่งที่ต้องมี
 
-- Node.js 20 ขึ้นไป และ npm
+- Node.js 20.9+ และ npm
 - Supabase CLI (`npx supabase` ก็ได้)
 - บัญชี Supabase, Vercel, GitHub และ Google AI Studio
 
 ## 1. สร้าง Supabase project
 
-สร้างสอง project บน Supabase: `dev` สำหรับพัฒนาและรันเทสต์ และ `prod` สำหรับเว็บจริง
+สร้างสอง project บน Supabase: `my-profile-dev` สำหรับพัฒนาและรันเทสต์ และ `my-profile-prod` สำหรับเว็บจริง
 จากนั้นผูก project ด้วย Supabase CLI แล้ว push schema (migrations ในโฟลเดอร์ `supabase/`):
 
 ```bash
@@ -21,7 +21,7 @@ npx supabase link --project-ref <project-ref ของ dev>
 npx supabase db push
 ```
 
-ทำซ้ำกับ project `prod` โดยเปลี่ยน `--project-ref` เป็นของ prod
+ทำซ้ำกับ project `my-profile-prod` โดยเปลี่ยน `--project-ref` เป็นของ prod
 
 ## 2. ตั้งค่า environment
 
@@ -35,7 +35,7 @@ npx supabase db push
 | `GEMINI_API_KEY` | key ของ Gemini (ใช้ฝั่งเซิร์ฟเวอร์เท่านั้น) |
 | `GEMINI_MODEL` | ชื่อโมเดล Gemini ตรวจชื่อล่าสุดใน Google AI Studio ก่อน deploy |
 | `CRON_SECRET` | รหัสลับสำหรับเรียก `/api/keepalive` |
-| `NEXT_PUBLIC_SITE_URL` | URL ของเว็บ เช่น `http://localhost:3000` |
+| `NEXT_PUBLIC_SITE_URL` | URL ของเว็บ เช่น `http://localhost:3000` (บน Vercel ต้องตั้งเป็นโดเมนจริงของเว็บ ถ้าไม่ตั้งจะใช้ `VERCEL_PROJECT_PRODUCTION_URL` แทน และถ้ายังเป็น localhost ตอน production จะมี warning ใน log) |
 | `ADMIN_EMAIL` | อีเมลของผู้ดูแลที่เข้าหลังบ้านได้ |
 | `TEST_ADMIN_EMAIL`, `TEST_ADMIN_PASSWORD` | บัญชีผู้ดูแลสำหรับเทสต์ RLS (ใช้กับ project dev เท่านั้น) |
 
@@ -85,8 +85,11 @@ npm run build
 ## 6. Deploy บน Vercel
 
 1. Import repo `sakda1306/my-profile` เข้า Vercel
-2. ที่ Settings > Environment Variables ใส่ตัวแปรทั้งหมดจากตารางด้านบนโดยชี้ไปที่ project `prod`
-   ของ Supabase (ไม่ต้องใส่ `TEST_ADMIN_*`)
+2. ที่ Settings > Environment Variables ใส่เฉพาะตัวแปรเหล่านี้ โดยชี้ไปที่ project `my-profile-prod`
+   ของ Supabase: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `GEMINI_API_KEY`,
+   `GEMINI_MODEL`, `CRON_SECRET` และ `NEXT_PUBLIC_SITE_URL` (ตั้งเป็นโดเมนจริงของเว็บ)
+   ห้ามใส่ `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_EMAIL`, `TEST_ADMIN_EMAIL` และ `TEST_ADMIN_PASSWORD`
+   บน Vercel เพราะใช้เฉพาะในเครื่องสำหรับ `npm run seed` และเทสต์ (service role key ข้าม RLS ได้)
 3. ตั้ง `CRON_SECRET` เป็นสตริงสุ่มยาว ๆ Vercel Cron จะส่งค่านี้มาเป็น
    `Authorization: Bearer <CRON_SECRET>` ให้อัตโนมัติ
 4. `vercel.json` ตั้ง cron เรียก `/api/keepalive` ทุกวันเวลา 03:00 UTC เพื่อไม่ให้ project

@@ -58,6 +58,12 @@ export function SortableList<T extends { id: string }>({
   onReorder,
 }: Props<T>) {
   const [items, setItems] = useState(initial);
+  // Server refreshes (add, edit, delete) hand down a new array: adopt it.
+  const [seen, setSeen] = useState(initial);
+  if (initial !== seen) {
+    setSeen(initial);
+    setItems(initial);
+  }
   const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const sensors = useSensors(

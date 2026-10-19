@@ -12,6 +12,7 @@ import { friendlyDbError } from "@/lib/admin/bilingual";
 
 const TABLES = Object.keys(STORAGE_COLUMNS) as ContentTable[];
 const NO_ORDER_ERROR = "ตารางนี้ไม่รองรับการทำงานนี้";
+const NOT_FOUND_ERROR = "ไม่พบรายการ";
 const BAD_TABLE_ERROR = "ไม่พบตารางที่ระบุ";
 
 // Child tables whose files must be removed together with the parent row.
@@ -31,7 +32,11 @@ type LooseClient = {
     update(values: Row): {
       eq(col: string, val: string): PromiseLike<{ error: Err }>;
     };
-    delete(): { eq(col: string, val: string): PromiseLike<{ error: Err }> };
+    delete(): {
+      eq(col: string, val: string): {
+        select(cols: string): PromiseLike<{ data: Row[] | null; error: Err }>;
+      };
+    };
   };
 };
 
@@ -90,8 +95,10 @@ export async function deleteRow(table: ContentTable, id: string): Promise<Action
     for (const r of kids ?? []) paths.push(...collectStoragePaths(r, STORAGE_COLUMNS[child.table]));
   }
 
-  const { error } = await db.from(table).delete().eq("id", id);
+  // select("id") shows how many rows were really removed: RLS filters silently.
+  const { data: deleted, error } = await db.from(table).delete().eq("id", id).select("id");
   if (error) return { ok: false, error: friendlyDbError(error) };
+  if (!deleted || deleted.length === 0) return { ok: false, error: NOT_FOUND_ERROR };
 
   // Row is gone; remove files best-effort. A storage failure never blocks the delete.
   const unique = [...new Set(paths)];

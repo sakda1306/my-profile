@@ -7,7 +7,7 @@ import { TagFilter } from "@/components/public/TagFilter";
 import { routing } from "@/i18n/routing";
 import { formatDate } from "@/lib/content/format";
 import { getPosts } from "@/lib/content/queries";
-import { pick } from "@/lib/locale/pick";
+import { isPostFallback, pick } from "@/lib/locale/pick";
 import { ALL_OWN } from "@/lib/seo/alternates";
 import { buildMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
@@ -32,7 +32,7 @@ export default async function BlogPage({ params }: PageProps<"/[locale]/blog">) 
       slug: p.slug,
       title: String(title.value ?? p.slug),
       excerpt: String(excerpt.value ?? ""),
-      isFallback: title.isFallback,
+      isFallback: isPostFallback(p, locale),
       date: p.published_at ? formatDate(p.published_at, locale) : "",
       tags: p.tags,
     };

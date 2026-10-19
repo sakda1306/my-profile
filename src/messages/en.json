@@ -54,5 +54,16 @@
     "all": "All",
     "empty": "No posts yet",
     "back": "Back to posts"
+  },
+  "meta": {
+    "description": "Personal profile and portfolio"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page may have moved or is not published yet",
+    "home": "Back to home",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Sorry, this page could not be loaded. Please try again.",
+    "retry": "Try again"
   }
 }

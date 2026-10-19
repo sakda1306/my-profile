@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   LOCALES,
   hasOwnContent,
+  isPostFallback,
   isEmptyValue,
   otherLocale,
   pick,
@@ -81,6 +82,24 @@ describe("locale helpers", () => {
           "th",
         ),
       ).toBe(true);
+    });
+  });
+
+  describe("isPostFallback", () => {
+    const post = { title_th: "ก", title_en: "A", content_th: DOC_WITH_TEXT, content_en: null };
+
+    it("is a fallback in en when the title is translated but the content is not", () => {
+      expect(isPostFallback(post, "en")).toBe(true);
+    });
+
+    it("is not a fallback in th, where both title and content exist", () => {
+      expect(isPostFallback(post, "th")).toBe(false);
+    });
+
+    it("matches the canonical and sitemap rule for every locale", () => {
+      for (const l of ["th", "en"] as const) {
+        expect(isPostFallback(post, l)).toBe(!hasOwnContent(post, ["title", "content"], l));
+      }
     });
   });
 });

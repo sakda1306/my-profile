@@ -5,9 +5,23 @@ export type OwnContent = Record<Locale, boolean>;
 
 export const ALL_OWN: OwnContent = { th: true, en: true };
 
+let warned = false;
+
+// Order: NEXT_PUBLIC_SITE_URL, then the Vercel production domain, then localhost.
 export function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "http://localhost:3000";
-  return raw.replace(/\/+$/, "");
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (vercel ? `https://${vercel}` : "") ||
+    "http://localhost:3000";
+  const result = raw.replace(/\/+$/, "");
+  if (!warned && process.env.NODE_ENV === "production" && /^https?:\/\/localhost(:|\/|$)/.test(result)) {
+    warned = true;
+    console.warn(
+      "getSiteUrl: resolved to localhost in production. Set NEXT_PUBLIC_SITE_URL to the real domain.",
+    );
+  }
+  return result;
 }
 
 function url(siteUrl: string, locale: Locale, path: string): string {

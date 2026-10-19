@@ -40,6 +40,9 @@ describe("GET /api/keepalive", () => {
 
   it("returns 500 when the query fails", async () => {
     limit.mockResolvedValue({ data: null, error: { message: "boom" } });
+    const err = vi.spyOn(console, "error").mockImplementation(() => {});
     expect((await GET(req("Bearer s3cret"))).status).toBe(500);
+    expect(err).toHaveBeenCalledWith(expect.any(String), "boom");
+    err.mockRestore();
   });
 });

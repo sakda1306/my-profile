@@ -13,6 +13,9 @@ function authorized(request: Request): boolean {
 export async function GET(request: Request) {
   if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
   const { error } = await createPublicClient().from("profile").select("id").limit(1);
-  if (error) return Response.json({ ok: false }, { status: 500 });
+  if (error) {
+    console.error("keepalive query failed:", error.message);
+    return Response.json({ ok: false }, { status: 500 });
+  }
   return Response.json({ ok: true });
 }
