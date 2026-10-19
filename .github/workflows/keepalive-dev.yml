@@ -1,0 +1,18 @@
+name: keepalive-dev
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping dev Supabase project
+        env:
+          DEV_SUPABASE_URL: ${{ secrets.DEV_SUPABASE_URL }}
+          DEV_SUPABASE_ANON_KEY: ${{ secrets.DEV_SUPABASE_ANON_KEY }}
+        run: |
+          curl -fsS "$DEV_SUPABASE_URL/rest/v1/profile?select=id&limit=1" \
+            -H "apikey: $DEV_SUPABASE_ANON_KEY"
