@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useId, useState, useTransition, type ReactNode } from "react";
 import {
   DndContext,
   KeyboardSensor,
@@ -66,6 +66,9 @@ export function SortableList<T extends { id: string }>({
   }
   const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+  // dnd-kit numbers its aria ids with a module counter that differs between server and
+  // browser; a React id keeps them equal so hydration matches.
+  const dndId = useId();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -99,7 +102,7 @@ export function SortableList<T extends { id: string }>({
           {error}
         </p>
       ) : null}
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
           <ul className="space-y-2">
             {items.map((item) => (
