@@ -4,8 +4,9 @@ import Link from "next/link";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { SortableList } from "@/components/admin/SortableList";
 import { VisibilityToggle } from "@/components/admin/VisibilityToggle";
+import { previewHref } from "@/lib/admin/preview-link";
 
-export type ProjectItem = { id: string; title: string; is_featured: boolean; is_visible: boolean };
+export type ProjectItem = { id: string; slug: string; title: string; is_featured: boolean; is_visible: boolean };
 
 export function ProjectList({ items }: { items: ProjectItem[] }) {
   return (
@@ -20,6 +21,7 @@ export function ProjectList({ items }: { items: ProjectItem[] }) {
           </div>
           <VisibilityToggle table="projects" id={p.id} visible={p.is_visible} />
           <Link href={`/admin/projects/${p.id}`}>แก้ไข</Link>
+          {p.is_visible ? null : <a href={previewHref(`/th/projects/${p.slug}`)}>ดูตัวอย่าง</a>}
           <ConfirmDelete table="projects" id={p.id} label={`โปรเจกต์ ${p.title}`} />
         </div>
       )}

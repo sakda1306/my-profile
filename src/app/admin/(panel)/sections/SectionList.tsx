@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { SortableList } from "@/components/admin/SortableList";
 import { VisibilityToggle } from "@/components/admin/VisibilityToggle";
+import { previewHref } from "@/lib/admin/preview-link";
 import { TYPE_LABEL, isCreatableType } from "@/lib/admin/schemas";
 
 export type SectionRow = {
@@ -39,6 +40,7 @@ export function SectionList({ items }: { items: SectionRow[] }) {
           </div>
           <VisibilityToggle table="sections" id={s.id} visible={s.is_visible} />
           <Link href={`/admin/sections/${s.id}`}>แก้ไข</Link>
+          {s.is_visible ? null : <a href={previewHref("/th")}>ดูตัวอย่าง</a>}
           {s.is_system ? null : (
             <ConfirmDelete table="sections" id={s.id} label={`หมวด ${s.title}`} />
           )}

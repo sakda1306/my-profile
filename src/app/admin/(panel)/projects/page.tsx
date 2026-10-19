@@ -6,10 +6,11 @@ export default async function ProjectsPage() {
   const { supabase } = await requireAdmin();
   const { data } = await supabase
     .from("projects")
-    .select("id, title_th, title_en, is_featured, is_visible")
+    .select("id, slug, title_th, title_en, is_featured, is_visible")
     .order("sort_order", { ascending: true });
   const items = (data ?? []).map((p) => ({
     id: p.id,
+    slug: p.slug,
     title: p.title_th || p.title_en,
     is_featured: p.is_featured,
     is_visible: p.is_visible,

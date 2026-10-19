@@ -15,7 +15,8 @@ export function isAdminResult(
   return Boolean(userId) && isAdmin === true;
 }
 
-async function check(): Promise<AdminContext | null> {
+// Non-redirecting check, for route handlers that must answer 401 themselves.
+export async function checkAdmin(): Promise<AdminContext | null> {
   const supabase = await createServerClient();
   const { data: userData } = await supabase.auth.getUser();
   const userId = userData.user?.id;
@@ -27,7 +28,7 @@ async function check(): Promise<AdminContext | null> {
 
 // For pages and layouts: redirects to the login page when not an admin.
 export async function requireAdmin(): Promise<AdminContext> {
-  const ctx = await check();
+  const ctx = await checkAdmin();
   if (!ctx) redirect("/admin/login");
   return ctx;
 }
@@ -36,5 +37,5 @@ export async function requireAdmin(): Promise<AdminContext> {
 export async function requireAdminAction(): Promise<
   AdminContext | { error: string }
 > {
-  return (await check()) ?? { error: RELOGIN_MESSAGE };
+  return (await checkAdmin()) ?? { error: RELOGIN_MESSAGE };
 }

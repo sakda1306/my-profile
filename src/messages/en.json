@@ -1,6 +1,12 @@
 {
-  "nav": { "home": "Home", "projects": "Projects", "blog": "Blog" },
-  "language": { "switch": "ไทย" },
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "blog": "Blog"
+  },
+  "language": {
+    "switch": "ไทย"
+  },
   "sections": {
     "skills": "Skills",
     "projects": "Projects",
@@ -8,10 +14,45 @@
     "latestPosts": "Latest posts",
     "contact": "Contact"
   },
-  "fallback": { "badge": "Available in Thai only" },
+  "fallback": {
+    "badge": "Available in Thai only"
+  },
   "preview": {
     "banner": "Preview mode: viewing unpublished content",
     "exit": "Exit preview"
   },
-  "home": { "title": "My Profile" }
+  "home": {
+    "title": "My Profile"
+  },
+  "common": {
+    "present": "Present"
+  },
+  "hero": {
+    "resume": "View resume",
+    "contact": "Contact me"
+  },
+  "skillCategory": {
+    "language": "Languages",
+    "framework": "Frameworks",
+    "tool": "Tools",
+    "ai_data": "AI and data",
+    "soft": "Other skills"
+  },
+  "certificate": {
+    "credential": "Verify credential",
+    "file": "View file"
+  },
+  "project": {
+    "role": "Role",
+    "stack": "Stack",
+    "repo": "Source",
+    "demo": "Demo",
+    "gallery": "Gallery"
+  },
+  "blog": {
+    "title": "Blog",
+    "all": "All",
+    "empty": "No posts yet",
+    "back": "Back to posts"
+  }
 }

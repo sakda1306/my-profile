@@ -6,10 +6,11 @@ export default async function PostsPage() {
   const { supabase } = await requireAdmin();
   const { data } = await supabase
     .from("posts")
-    .select("id, title_th, title_en, status, updated_at")
+    .select("id, slug, title_th, title_en, status, updated_at")
     .order("updated_at", { ascending: false });
   const items = (data ?? []).map((p) => ({
     id: p.id,
+    slug: p.slug,
     title: p.title_th || p.title_en,
     status: p.status,
     updated_at: p.updated_at,

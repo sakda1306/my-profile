@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/auth/require-admin";
+import { previewHref } from "@/lib/admin/preview-link";
 import { AddSectionForm } from "./AddSectionForm";
 import { SectionList } from "./SectionList";
 
@@ -19,6 +20,7 @@ export default async function SectionsPage() {
   return (
     <main className="space-y-6">
       <h1 className="text-2xl font-semibold">หมวดของหน้าแรก</h1>
+      <a href={previewHref("/th")}>ดูตัวอย่างหน้าแรก</a>
       <p className="text-sm text-muted">ลากเพื่อเรียงลำดับ หมวดตั้งต้นซ่อนได้แต่ลบไม่ได้</p>
       {items.length === 0 ? <p className="text-muted">ยังไม่มีหมวด</p> : <SectionList items={items} />}
       <section className="space-y-3">

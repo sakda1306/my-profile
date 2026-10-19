@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
+import { previewHref } from "@/lib/admin/preview-link";
 import { PostStatusButton } from "./PostStatusButton";
 
 export type PostItem = {
   id: string;
+  slug: string;
   title: string;
   status: "draft" | "published";
   updated_at: string;
@@ -27,6 +29,7 @@ export function PostList({ items }: { items: PostItem[] }) {
           </div>
           <PostStatusButton id={p.id} status={p.status} />
           <Link href={`/admin/posts/${p.id}`}>แก้ไข</Link>
+          {p.status === "draft" ? <a href={previewHref(`/th/blog/${p.slug}`)}>ดูตัวอย่าง</a> : null}
           <ConfirmDelete
             table="posts"
             id={p.id}

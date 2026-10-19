@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { LanguageSwitcher } from "@/components/public/LanguageSwitcher";
+import { PreviewBanner } from "@/components/public/PreviewBanner";
+import { SiteNav } from "@/components/public/SiteNav";
 import { notoSansThai } from "@/app/fonts";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
@@ -28,9 +30,10 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${notoSansThai.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <header>
-            <LanguageSwitcher />
-          </header>
+          <Suspense>
+            <PreviewBanner locale={locale} />
+          </Suspense>
+          <SiteNav />
           {children}
         </NextIntlClientProvider>
       </body>
