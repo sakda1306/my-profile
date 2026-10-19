@@ -152,3 +152,81 @@ export type ProjectInput = Bi<"title"> &
     start_date: string;
     end_date: string;
   };
+
+// ---- Sections (Task 9) ----
+export const CREATABLE_TYPES = ["rich_text", "gallery", "cards", "timeline"] as const;
+export type CreatableType = (typeof CREATABLE_TYPES)[number];
+export const TYPE_LABEL: Record<CreatableType, string> = {
+  rich_text: "ข้อความ",
+  gallery: "แกลเลอรี",
+  cards: "การ์ด",
+  timeline: "ไทม์ไลน์",
+};
+
+export function isCreatableType(v: unknown): v is CreatableType {
+  return typeof v === "string" && (CREATABLE_TYPES as readonly string[]).includes(v);
+}
+
+export const createSectionSchema = withBilingual(
+  { type: z.enum(CREATABLE_TYPES) },
+  [{ name: "title", required: true, max: 120 }],
+);
+
+export const sectionSettingsSchema = z.object({
+  columns: z.number().int("ต้องเป็นจำนวนเต็ม").min(1, "จำนวนคอลัมน์ต้องอยู่ระหว่าง 1-4").max(4, "จำนวนคอลัมน์ต้องอยู่ระหว่าง 1-4").optional(),
+  limit: z.number().int("ต้องเป็นจำนวนเต็ม").min(1, "จำนวนต้องอยู่ระหว่าง 1-12").max(12, "จำนวนต้องอยู่ระหว่าง 1-12").optional(),
+});
+export type SectionSettings = z.infer<typeof sectionSettingsSchema>;
+
+// Keep only the settings keys that make sense for the section type.
+export function pickSettings(type: string, s: SectionSettings): SectionSettings {
+  const out: SectionSettings = {};
+  if ((type === "gallery" || type === "cards") && s.columns !== undefined) out.columns = s.columns;
+  if (type === "latest_posts" && s.limit !== undefined) out.limit = s.limit;
+  return out;
+}
+
+export const sectionSchema = withBilingual({ slug: z.string().trim().max(80) }, [
+  { name: "title", required: true, max: 120 },
+  { name: "subtitle", required: false, max: 300 },
+]).transform((v) => {
+  const r = v as Record<string, unknown> & { slug: string; title_en: string; title_th: string };
+  return { ...r, slug: slugify(r.slug || r.title_en || r.title_th, "section") };
+});
+
+export function sectionItemSchema(type: "gallery" | "cards" | "timeline") {
+  return withBilingual(
+    {
+      body_th: z.string().trim().max(2000),
+      body_en: z.string().trim().max(2000),
+      image_path: z.string().max(200),
+      link_url: httpUrl({ optional: true }),
+      start_date: emptyOr(z.iso.date("วันที่ไม่ถูกต้อง")),
+      end_date: emptyOr(z.iso.date("วันที่ไม่ถูกต้อง")),
+    },
+    [{ name: "title", required: type !== "gallery", max: 160 }],
+  ).superRefine((v, ctx) => {
+    if (type === "gallery" && !v.image_path) {
+      ctx.addIssue({ code: "custom", message: "เลือกรูปภาพ", path: ["image_path"] });
+    }
+    if (type === "timeline" && !v.start_date) {
+      ctx.addIssue({ code: "custom", message: "กรอกวันที่เริ่ม", path: ["start_date"] });
+    }
+    if (v.start_date && v.end_date && v.end_date < v.start_date) {
+      ctx.addIssue({
+        code: "custom",
+        message: "วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่ม",
+        path: ["end_date"],
+      });
+    }
+  });
+}
+
+export type SectionInput = Bi<"title"> & Bi<"subtitle"> & { slug: string };
+export type SectionItemInput = Bi<"title"> &
+  Bi<"body"> & {
+    image_path: string;
+    link_url: string;
+    start_date: string;
+    end_date: string;
+  };

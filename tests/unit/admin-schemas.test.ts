@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  CREATABLE_TYPES,
   certificateSchema,
+  createSectionSchema,
+  pickSettings,
+  sectionItemSchema,
+  sectionSchema,
+  sectionSettingsSchema,
   parseStack,
   profileSchema,
   projectSchema,
@@ -141,4 +147,122 @@ describe("projectSchema", () => {
 describe("parseStack", () => {
   it("trims, drops empties", () => expect(parseStack(" a, ,b ,,c")).toEqual(["a", "b", "c"]));
   it("empty gives []", () => expect(parseStack("")).toEqual([]));
+});
+
+describe("createSectionSchema", () => {
+  const ok = { type: "timeline", title_th: "การศึกษา", title_en: "" };
+  it("accepts every creatable type", () => {
+    for (const type of CREATABLE_TYPES)
+      expect(createSectionSchema.safeParse({ ...ok, type }).success).toBe(true);
+  });
+  it("rejects hero and other system types", () => {
+    for (const type of ["hero", "skills", "projects", "certificates", "latest_posts", "contact"])
+      expect(createSectionSchema.safeParse({ ...ok, type }).success).toBe(false);
+  });
+  it("requires a title in at least one language", () =>
+    expect(createSectionSchema.safeParse({ ...ok, title_th: " " }).success).toBe(false));
+});
+
+describe("sectionSettingsSchema", () => {
+  it("accepts columns 1-4", () => {
+    expect(sectionSettingsSchema.safeParse({ columns: 1 }).success).toBe(true);
+    expect(sectionSettingsSchema.safeParse({ columns: 4 }).success).toBe(true);
+  });
+  it("rejects columns 5 and 0", () => {
+    expect(sectionSettingsSchema.safeParse({ columns: 5 }).success).toBe(false);
+    expect(sectionSettingsSchema.safeParse({ columns: 0 }).success).toBe(false);
+  });
+  it("limit is 1-12", () => {
+    expect(sectionSettingsSchema.safeParse({ limit: 12 }).success).toBe(true);
+    expect(sectionSettingsSchema.safeParse({ limit: 13 }).success).toBe(false);
+    expect(sectionSettingsSchema.safeParse({ limit: 0 }).success).toBe(false);
+  });
+  it("rejects non-integers", () =>
+    expect(sectionSettingsSchema.safeParse({ columns: 2.5 }).success).toBe(false));
+});
+
+describe("pickSettings", () => {
+  it("keeps columns only for gallery and cards", () => {
+    expect(pickSettings("gallery", { columns: 3, limit: 5 })).toEqual({ columns: 3 });
+    expect(pickSettings("cards", { columns: 2 })).toEqual({ columns: 2 });
+    expect(pickSettings("timeline", { columns: 2, limit: 3 })).toEqual({});
+  });
+  it("keeps limit only for latest_posts", () =>
+    expect(pickSettings("latest_posts", { columns: 3, limit: 5 })).toEqual({ limit: 5 }));
+});
+
+describe("sectionSchema", () => {
+  const base = { title_th: "", title_en: "Edu", subtitle_th: "", subtitle_en: "", slug: "" };
+  it("empty slug falls back to the English title", () =>
+    expect((sectionSchema.parse(base) as { slug: string }).slug).toBe("edu"));
+  it("normalises a typed slug", () =>
+    expect((sectionSchema.parse({ ...base, slug: " My Part! " }) as { slug: string }).slug).toBe(
+      "my-part",
+    ));
+  it("requires a title", () =>
+    expect(sectionSchema.safeParse({ ...base, title_en: "" }).success).toBe(false));
+});
+
+describe("sectionItemSchema", () => {
+  const item = {
+    title_th: "",
+    title_en: "",
+    body_th: "",
+    body_en: "",
+    image_path: "",
+    link_url: "",
+    start_date: "",
+    end_date: "",
+  };
+  it("timeline without start_date fails", () =>
+    expect(
+      sectionItemSchema("timeline").safeParse({ ...item, title_th: "ม.ปลาย" }).success,
+    ).toBe(false));
+  it("timeline with title and start_date passes", () =>
+    expect(
+      sectionItemSchema("timeline").safeParse({
+        ...item,
+        title_th: "ม.ปลาย",
+        start_date: "2020-05-01",
+      }).success,
+    ).toBe(true));
+  it("timeline without title fails", () =>
+    expect(
+      sectionItemSchema("timeline").safeParse({ ...item, start_date: "2020-05-01" }).success,
+    ).toBe(false));
+  it("timeline end before start fails", () =>
+    expect(
+      sectionItemSchema("timeline").safeParse({
+        ...item,
+        title_en: "x",
+        start_date: "2020-05-01",
+        end_date: "2019-01-01",
+      }).success,
+    ).toBe(false));
+  it("gallery needs image_path", () => {
+    expect(sectionItemSchema("gallery").safeParse(item).success).toBe(false);
+    expect(
+      sectionItemSchema("gallery").safeParse({ ...item, image_path: "sections/a.webp" }).success,
+    ).toBe(true);
+  });
+  it("cards need a title", () => {
+    expect(sectionItemSchema("cards").safeParse(item).success).toBe(false);
+    expect(sectionItemSchema("cards").safeParse({ ...item, title_en: "Card" }).success).toBe(true);
+  });
+  it("rejects non-http link_url", () =>
+    expect(
+      sectionItemSchema("cards").safeParse({
+        ...item,
+        title_en: "x",
+        link_url: "javascript:alert(1)",
+      }).success,
+    ).toBe(false));
+  it("accepts https link_url", () =>
+    expect(
+      sectionItemSchema("cards").safeParse({
+        ...item,
+        title_en: "x",
+        link_url: "https://example.com",
+      }).success,
+    ).toBe(true));
 });
