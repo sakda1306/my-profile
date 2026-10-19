@@ -16,6 +16,11 @@ export async function loginAction(
   const supabase = await createServerClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { ok: false, error: BAD_CREDENTIALS };
+  const { data: isAdmin } = await supabase.rpc("is_admin");
+  if (isAdmin !== true) {
+    await supabase.auth.signOut();
+    return { ok: false, error: BAD_CREDENTIALS };
+  }
   redirect("/admin");
 }
 

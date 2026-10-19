@@ -17,6 +17,9 @@ const NAV = [
   { href: "/admin/posts", label: "บทความ" },
 ];
 
+// Convention: the layout check alone does not protect pages (layout and page
+// render in parallel). Every panel page and data loader must call
+// requireAdmin(), and every server action must call requireAdminAction().
 // Reads cookies, so it must stay inside a Suspense boundary (cacheComponents).
 async function Guard({ children }: { children: React.ReactNode }) {
   await requireAdmin();
