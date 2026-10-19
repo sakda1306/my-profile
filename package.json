@@ -10,6 +10,7 @@
     "test": "vitest run tests/unit",
     "seed": "tsx --env-file=.env.local scripts/seed.ts",
     "hero-image": "tsx --env-file=.env.local scripts/set-hero-image.ts",
+    "copy-to-prod": "tsx scripts/copy-dev-to-prod.ts",
     "test:rls": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
