@@ -1,8 +1,10 @@
 // Seeds the initial bilingual content. Usage: npm run seed [-- --force]
 //
 // Exit codes: 0 = seeded; 1 = error; 2 = profile already exists (nothing changed, pass --force).
-// --force deletes and re-inserts ONLY skills, projects and is_system sections.
-// Custom sections, posts, certificates and admins are never touched.
+// --force never touches the profile row (it is inserted only when none exists).
+// --force DELETES AND RECREATES skills, projects and the is_system sections. This discards
+// owner edits to the system sections' titles, visibility and order, and cascades away their
+// section_items. Custom sections, posts, certificates, the profile and admins are never touched.
 import { createClient } from "@supabase/supabase-js";
 import { profile, projects, sections, skills } from "./seed-data";
 
@@ -25,7 +27,7 @@ async function main() {
   const existing = await db.from("profile").select("id").maybeSingle();
   if (existing.error) throw new Error(`read profile: ${existing.error.message}`);
   if (existing.data && !force) {
-    console.log("Profile already exists, nothing changed. Use `npm run seed -- --force` to re-seed skills, projects and system sections.");
+    console.log("Profile already exists, nothing changed. Use `npm run seed -- --force` to DELETE AND RECREATE skills, projects and system sections (owner edits to them are lost).");
     process.exit(2);
   }
 
@@ -44,11 +46,13 @@ async function main() {
   const a = await db.from("admins").upsert({ user_id: userId }, { onConflict: "user_id" });
   if (a.error) throw new Error(`admins: ${a.error.message}`);
 
-  // 2. profile
-  const pr = await db.from("profile").upsert({ id: true, ...profile }, { onConflict: "id" });
-  if (pr.error) throw new Error(`profile: ${pr.error.message}`);
+  // 2. profile: only when none exists (never overwritten, not even with --force)
+  if (!existing.data) {
+    const pr = await db.from("profile").insert({ id: true, ...profile });
+    if (pr.error) throw new Error(`profile: ${pr.error.message}`);
+  }
 
-  // 3. clear (force only). section_items cascade from sections; project_images from projects.
+  // 3. clear (force only). Deletes AND recreates system sections (owner edits are lost). section_items cascade from sections; project_images from projects.
   if (existing.data) {
     for (const [label, q] of [
       ["skills", db.from("skills").delete().not("id", "is", null)],
@@ -71,10 +75,11 @@ async function main() {
   if (pj.error) throw new Error(`projects: ${pj.error.message}`);
 
   console.log(`Seeded: profile, ${sections.length} sections, ${skills.length} skills, ${projects.length} projects.`);
-  console.log("NOTE: the public site caches content. Restart a running `next dev` / `next start` (and redeploy production) to see the seeded data.");
+  console.log("NOTE: the public site keeps persisted use-cache entries in the .next folder. Delete the .next folder, then restart `next dev` / `next start` (and redeploy production) to see the seeded data.");
 }
 
 main().catch((e) => {
   console.error(e instanceof Error ? e.message : "Seed failed");
+  console.error("If this failed after deleting rows, re-run with `npm run seed -- --force` to recover.");
   process.exit(1);
 });
