@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-// Returns the `{name_th, name_en}` zod shape. Each language is optional on its own;
-// `required` only means "at least one language" and is enforced by atLeastOne(name),
-// so callers use bilingualObject() (which wires it up) rather than z.object(bilingual(...)).
-export function bilingual(name: string, opts: { required: boolean; max: number }) {
+// Returns the `{name_th, name_en}` zod shape (each language optional, trimmed, max length).
+// It takes no `required` option on purpose: to require "at least one language" use
+// withBilingual(), which applies atLeastOne for you.
+export function bilingual(name: string, opts: { max: number }) {
   const field = () => z.string().trim().max(opts.max);
   return { [`${name}_th`]: field(), [`${name}_en`]: field() } as Record<
     `${string}_th` | `${string}_en`,
@@ -31,8 +31,19 @@ export function friendlyDbError(e: { code?: string }): string {
     : "บันทึกไม่สำเร็จ ลองอีกครั้ง";
 }
 
-// Safe wrapper: builds the object schema and applies atLeastOne when required is true.
-export function bilingualObject(name: string, opts: { required: boolean; max: number }) {
-  const base = z.object(bilingual(name, opts));
-  return opts.required ? base.superRefine(atLeastOne(name)) : base;
+export type BilingualSpec = { name: string; required: boolean; max: number };
+
+// Builds one object schema from extra fields plus any number of bilingual fields, and applies
+// the at-least-one rule for each spec with required:true. Example:
+//   withBilingual({ slug: z.string() }, [
+//     { name: "title", required: true, max: 120 },
+//     { name: "summary", required: false, max: 400 },
+//   ])
+export function withBilingual<S extends z.ZodRawShape>(base: S, specs: BilingualSpec[]) {
+  const shape: z.ZodRawShape = { ...base };
+  for (const sp of specs) Object.assign(shape, bilingual(sp.name, { max: sp.max }));
+  const required = specs.filter((sp) => sp.required);
+  return z.object(shape).superRefine((val, ctx) => {
+    for (const sp of required) atLeastOne(sp.name)(val as Record<string, unknown>, ctx);
+  });
 }
