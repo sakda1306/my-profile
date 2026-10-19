@@ -1,11 +1,12 @@
 import { z } from "zod";
 import { withBilingual } from "@/lib/admin/bilingual";
+import { httpUrl, linkUrl } from "@/lib/admin/url-schema";
 
 const emptyOr = <T extends z.ZodType>(s: T) => z.union([z.literal(""), s]);
 
 export const linkSchema = z.object({
   label: z.string().trim().min(1, "กรอกชื่อลิงก์").max(60),
-  url: z.url("ลิงก์ไม่ถูกต้อง"),
+  url: linkUrl(),
   icon: z.string().trim().max(40),
 });
 
@@ -52,7 +53,7 @@ export const certificateSchema = withBilingual(
     issuer: z.string().trim().max(120),
     issued_on: z.iso.date("วันที่ไม่ถูกต้อง"),
     expires_on: emptyOr(z.iso.date("วันที่ไม่ถูกต้อง")),
-    credential_url: emptyOr(z.url("ลิงก์ไม่ถูกต้อง")),
+    credential_url: httpUrl({ optional: true }),
     image_path: z.string(),
     file_path: z.string(),
   },
