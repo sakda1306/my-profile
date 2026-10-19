@@ -160,6 +160,9 @@ export type Database = {
           full_name_en: string
           full_name_th: string
           github_username: string | null
+          hero_badge_en: string
+          hero_badge_th: string
+          hero_image_path: string | null
           headline_en: string
           headline_th: string
           id: boolean
@@ -181,6 +184,9 @@ export type Database = {
           full_name_en?: string
           full_name_th?: string
           github_username?: string | null
+          hero_badge_en?: string
+          hero_badge_th?: string
+          hero_image_path?: string | null
           headline_en?: string
           headline_th?: string
           id?: boolean
@@ -202,6 +208,9 @@ export type Database = {
           full_name_en?: string
           full_name_th?: string
           github_username?: string | null
+          hero_badge_en?: string
+          hero_badge_th?: string
+          hero_image_path?: string | null
           headline_en?: string
           headline_th?: string
           id?: boolean

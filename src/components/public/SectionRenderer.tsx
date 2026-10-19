@@ -18,11 +18,28 @@ export function SectionRenderer({ data, locale }: { data: HomeData; locale: Loca
         const items = data.itemsBySection[section.id] ?? [];
         switch (section.type) {
           case "hero":
-            return <Hero key={section.id} profile={data.profile} locale={locale} />;
+            return (
+              <Hero
+                key={section.id}
+                profile={data.profile}
+                locale={locale}
+                projects={data.projects}
+                imagesByProject={data.imagesByProject}
+                skills={data.skills}
+              />
+            );
           case "skills":
             return <Skills key={section.id} section={section} skills={data.skills} locale={locale} />;
           case "projects":
-            return <Projects key={section.id} section={section} projects={data.projects} locale={locale} />;
+            return (
+              <Projects
+                key={section.id}
+                section={section}
+                projects={data.projects}
+                imagesByProject={data.imagesByProject}
+                locale={locale}
+              />
+            );
           case "certificates":
             return <Certificates key={section.id} section={section} certificates={data.certificates} locale={locale} />;
           case "latest_posts":

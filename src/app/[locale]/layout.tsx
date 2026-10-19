@@ -5,7 +5,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PreviewBanner } from "@/components/public/PreviewBanner";
 import { SiteNav } from "@/components/public/SiteNav";
-import { notoSansThai } from "@/app/fonts";
+import { SmokeCanvas } from "@/components/public/fx/SmokeCanvas";
+import { kanit } from "@/app/fonts";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -29,8 +30,9 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={`${notoSansThai.variable} h-full antialiased`}>
+    <html lang={locale} data-theme="night" className={`${kanit.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <SmokeCanvas className="fixed inset-0 -z-10" count={42} size={0.6} alpha={1} wind={0.05} />
         <NextIntlClientProvider>
           <Suspense>
             <PreviewBanner locale={locale} />

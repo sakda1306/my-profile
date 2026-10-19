@@ -1,9 +1,14 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 @import "../styles/rich-text.css";
+@import "../styles/poster.css";
 
 body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
+}
+
+[data-theme="night"] body {
+  background: radial-gradient(1200px 700px at 50% 0%, var(--color-indigo-deep) 0%, var(--color-bg) 70%) fixed;
 }

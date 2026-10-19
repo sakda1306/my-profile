@@ -11,8 +11,8 @@ import type { Json } from "@/lib/supabase/database.types";
 
 const FIELDS = [
   "full_name_th", "full_name_en", "headline_th", "headline_en", "university_th",
-  "university_en", "location_th", "location_en", "email", "github_username",
-  "avatar_path", "resume_path_th", "resume_path_en",
+  "university_en", "location_th", "location_en", "hero_badge_th", "hero_badge_en",
+  "email", "github_username", "avatar_path", "hero_image_path", "resume_path_th", "resume_path_en",
 ] as const;
 
 export async function saveProfile(form: FormData): Promise<ActionResult> {
@@ -37,7 +37,7 @@ export async function saveProfile(form: FormData): Promise<ActionResult> {
 
   const { data: old } = await auth.supabase
     .from("profile")
-    .select("avatar_path, resume_path_th, resume_path_en")
+    .select("avatar_path, hero_image_path, resume_path_th, resume_path_en")
     .eq("id", true)
     .maybeSingle();
 
@@ -51,12 +51,15 @@ export async function saveProfile(form: FormData): Promise<ActionResult> {
     university_en: v.university_en,
     location_th: v.location_th,
     location_en: v.location_en,
+    hero_badge_th: v.hero_badge_th,
+    hero_badge_en: v.hero_badge_en,
     email: v.email || null,
     github_username: v.github_username || null,
     bio_th: bioTh.doc as Json | null,
     bio_en: bioEn.doc as Json | null,
     links: v.links,
     avatar_path: v.avatar_path || null,
+    hero_image_path: v.hero_image_path || null,
     resume_path_th: v.resume_path_th || null,
     resume_path_en: v.resume_path_en || null,
   });
@@ -64,6 +67,7 @@ export async function saveProfile(form: FormData): Promise<ActionResult> {
 
   await removeReplaced(auth.supabase, [
     [old?.avatar_path, v.avatar_path || null],
+    [old?.hero_image_path, v.hero_image_path || null],
     [old?.resume_path_th, v.resume_path_th || null],
     [old?.resume_path_en, v.resume_path_en || null],
   ]);
