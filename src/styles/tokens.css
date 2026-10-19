@@ -1,0 +1,13 @@
+@theme {
+  --color-bg: #ffffff;
+  --color-fg: #171717;
+  --color-muted: #6b7280;
+  --color-accent: #2563eb;
+  --color-surface: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-danger: #b91c1c;
+  --color-on-accent: #ffffff;
+  --font-sans: var(--font-noto-sans-thai), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 0.75rem;
+  --space-section: 4rem;
+}
