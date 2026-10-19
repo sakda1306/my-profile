@@ -18,7 +18,7 @@ import { slugify } from "@/lib/admin/slugify";
 import { requireAdminAction } from "@/lib/auth/require-admin";
 import { revalidatePublic } from "@/lib/content/revalidate";
 import type { Json } from "@/lib/supabase/database.types";
-import { plainToDoc } from "@/lib/richtext/plain";
+import { parseDocField } from "@/lib/admin/doc-field";
 
 const IMAGE_FOLDER = "sections/";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -122,8 +122,12 @@ export async function updateSection(form: FormData): Promise<ActionResult> {
     settings,
   };
   if (section.type === "rich_text") {
-    values.body_th = plainToDoc(str(form, "body_th")) as Json | null;
-    values.body_en = plainToDoc(str(form, "body_en")) as Json | null;
+    const bodyTh = parseDocField(str(form, "body_th"));
+    if (!bodyTh.ok) return { ok: false, error: bodyTh.error };
+    const bodyEn = parseDocField(str(form, "body_en"));
+    if (!bodyEn.ok) return { ok: false, error: bodyEn.error };
+    values.body_th = bodyTh.doc as Json | null;
+    values.body_en = bodyEn.doc as Json | null;
   }
   const { error } = await auth.supabase.from("sections").update(values).eq("id", id);
   if (error) return { ok: false, error: friendlyDbError(error) };

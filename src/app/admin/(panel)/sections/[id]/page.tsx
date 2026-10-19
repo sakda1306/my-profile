@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActionForm } from "@/components/admin/ActionForm";
 import { BilingualField } from "@/components/admin/BilingualField";
+import { asDoc } from "@/lib/admin/doc-field";
 import { requireAdmin } from "@/lib/auth/require-admin";
-import { docToPlain } from "@/lib/richtext/plain";
 import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { updateSection } from "../actions";
 import { SectionItems } from "../SectionItems";
@@ -63,7 +63,7 @@ export default async function SectionPage({ params }: { params: Promise<{ id: st
         <BilingualField name="title" label="ชื่อหมวด" translateEnabled={translateEnabled} defaultTh={section.title_th} defaultEn={section.title_en} />
         <BilingualField name="subtitle" label="คำโปรย" kind="textarea" translateEnabled={translateEnabled} defaultTh={section.subtitle_th} defaultEn={section.subtitle_en} />
         {section.type === "rich_text" ? (
-          <BilingualField name="body" label="เนื้อหา" kind="richtext" translateEnabled={translateEnabled} defaultTh={docToPlain(section.body_th)} defaultEn={docToPlain(section.body_en)} />
+          <BilingualField name="body" label="เนื้อหา" kind="richtext" imageFolder="sections" translateEnabled={translateEnabled} defaultDocTh={asDoc(section.body_th)} defaultDocEn={asDoc(section.body_en)} />
         ) : null}
         <label className="block">
           <span className="mb-1 block text-sm text-muted">slug ใช้เป็นลิงก์ไปยังหมวด (เว้นว่างให้สร้างอัตโนมัติ)</span>

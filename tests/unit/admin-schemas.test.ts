@@ -9,6 +9,7 @@ import {
   sectionSettingsSchema,
   parseStack,
   profileSchema,
+  postSchema,
   projectSchema,
   skillSchema,
 } from "@/lib/admin/schemas";
@@ -265,4 +266,62 @@ describe("sectionItemSchema", () => {
         link_url: "https://example.com",
       }).success,
     ).toBe(true));
+});
+
+const validPost = {
+  title_th: "บทความ",
+  title_en: "",
+  excerpt_th: "",
+  excerpt_en: "",
+  slug: "",
+  cover_path: "",
+  tags: [] as string[],
+  content_th: null,
+  content_en: null,
+};
+
+describe("postSchema", () => {
+  it("accepts valid", () => expect(postSchema.safeParse(validPost).success).toBe(true));
+  it("lowercases tags", () =>
+    expect(postSchema.safeParse({ ...validPost, tags: ["RAG", "AI"] }).data?.tags).toEqual([
+      "rag",
+      "ai",
+    ]));
+  it("trims and dedupes tags", () =>
+    expect(
+      postSchema.safeParse({ ...validPost, tags: [" AI ", "ai", "", "Ml"] }).data?.tags,
+    ).toEqual(["ai", "ml"]));
+  it("rejects 11 tags", () =>
+    expect(
+      postSchema.safeParse({ ...validPost, tags: Array.from({ length: 11 }, (_, i) => `t${i}`) })
+        .success,
+    ).toBe(false));
+  it("accepts 10 tags", () =>
+    expect(
+      postSchema.safeParse({ ...validPost, tags: Array.from({ length: 10 }, (_, i) => `t${i}`) })
+        .success,
+    ).toBe(true));
+  it("rejects a 31 character tag", () =>
+    expect(postSchema.safeParse({ ...validPost, tags: ["a".repeat(31)] }).success).toBe(false));
+  it("requires a title in one language", () =>
+    expect(postSchema.safeParse({ ...validPost, title_th: "" }).success).toBe(false));
+  it("rejects a title over 160", () =>
+    expect(postSchema.safeParse({ ...validPost, title_th: "ก".repeat(161) }).success).toBe(false));
+  it("rejects an excerpt over 300", () =>
+    expect(postSchema.safeParse({ ...validPost, excerpt_en: "a".repeat(301) }).success).toBe(
+      false,
+    ));
+  it("derives slug from the English title, then the Thai title", () => {
+    expect(postSchema.safeParse({ ...validPost, title_en: "Hello RAG" }).data?.slug).toBe(
+      "hello-rag",
+    );
+    expect(postSchema.safeParse(validPost).data?.slug).toMatch(/^post-/);
+  });
+  it("keeps an explicit slug normalised", () =>
+    expect(postSchema.safeParse({ ...validPost, slug: "My Post" }).data?.slug).toBe("my-post"));
+  it("accepts a doc and rejects a non-doc", () => {
+    const doc = { type: "doc", content: [{ type: "paragraph" }] };
+    expect(postSchema.safeParse({ ...validPost, content_th: doc }).success).toBe(true);
+    expect(postSchema.safeParse({ ...validPost, content_th: { type: "x" } }).success).toBe(false);
+  });
 });

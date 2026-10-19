@@ -7,7 +7,7 @@ import { parseStack, projectSchema, type ProjectInput } from "@/lib/admin/schema
 import { requireAdminAction } from "@/lib/auth/require-admin";
 import { revalidatePublic } from "@/lib/content/revalidate";
 import type { Json } from "@/lib/supabase/database.types";
-import { plainToDoc } from "@/lib/richtext/plain";
+import { parseDocField } from "@/lib/admin/doc-field";
 
 const IMAGE_FOLDER = "projects/";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -35,6 +35,10 @@ export async function upsertProject(form: FormData): Promise<ActionResult<{ id: 
   });
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
   const v = parsed.data as ProjectInput;
+  const bodyTh = parseDocField(str(form, "body_th"));
+  if (!bodyTh.ok) return { ok: false, error: bodyTh.error };
+  const bodyEn = parseDocField(str(form, "body_en"));
+  if (!bodyEn.ok) return { ok: false, error: bodyEn.error };
   const values = {
     title_th: v.title_th,
     title_en: v.title_en,
@@ -42,8 +46,8 @@ export async function upsertProject(form: FormData): Promise<ActionResult<{ id: 
     summary_en: v.summary_en,
     my_role_th: v.my_role_th,
     my_role_en: v.my_role_en,
-    body_th: plainToDoc(str(form, "body_th")) as Json | null,
-    body_en: plainToDoc(str(form, "body_en")) as Json | null,
+    body_th: bodyTh.doc as Json | null,
+    body_en: bodyEn.doc as Json | null,
     slug: v.slug,
     stack: v.stack,
     repo_url: v.repo_url || null,

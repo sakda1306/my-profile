@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BilingualField } from "@/components/admin/BilingualField";
 import { MediaUpload } from "@/components/admin/MediaUpload";
+import { asDoc } from "@/lib/admin/doc-field";
 import { requireAdmin } from "@/lib/auth/require-admin";
-import { docToPlain } from "@/lib/richtext/plain";
 import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { ProjectForm } from "../ProjectForm";
 import { ProjectImages } from "../ProjectImages";
@@ -43,7 +43,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <BilingualField name="title" label="ชื่อโปรเจกต์" translateEnabled={translateEnabled} defaultTh={project?.title_th} defaultEn={project?.title_en} />
         <BilingualField name="summary" label="สรุปสั้น ๆ" kind="textarea" translateEnabled={translateEnabled} defaultTh={project?.summary_th} defaultEn={project?.summary_en} />
         <BilingualField name="my_role" label="หน้าที่ของฉัน" kind="textarea" translateEnabled={translateEnabled} defaultTh={project?.my_role_th} defaultEn={project?.my_role_en} />
-        <BilingualField name="body" label="รายละเอียด" kind="richtext" translateEnabled={translateEnabled} defaultTh={docToPlain(project?.body_th)} defaultEn={docToPlain(project?.body_en)} />
+        <BilingualField name="body" label="รายละเอียด" kind="richtext" imageFolder="projects" translateEnabled={translateEnabled} defaultDocTh={asDoc(project?.body_th)} defaultDocEn={asDoc(project?.body_en)} />
         <label className="block">
           <span className="mb-1 block text-sm text-muted">เทคโนโลยี (คั่นด้วยเครื่องหมายจุลภาค สูงสุด 15)</span>
           <input name="stack" defaultValue={(project?.stack ?? []).join(", ")} className={input} />

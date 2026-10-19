@@ -15,8 +15,6 @@ export const profileSchema = withBilingual(
   {
     email: emptyOr(z.email("อีเมลไม่ถูกต้อง")),
     github_username: z.string().trim().max(60),
-    bio_th: z.string().trim().max(20000),
-    bio_en: z.string().trim().max(20000),
     links: z.array(linkSchema).max(10, "เพิ่มลิงก์ได้ไม่เกิน 10 รายการ"),
     avatar_path: z.string(),
     resume_path_th: z.string(),
@@ -110,6 +108,54 @@ export const projectSchema = withBilingual(
     return { ...r, slug: slugify(r.slug || r.title_en || r.title_th, "project") };
   });
 
+export const MAX_TAGS = 10;
+export const MAX_TAG_LENGTH = 30;
+export const MAX_DOC_BYTES = 500_000;
+
+// Tiptap document: an object with type "doc". Content is checked by sanitizeDoc and the editor schema.
+export const tiptapDocSchema = z
+  .object({ type: z.literal("doc"), content: z.array(z.looseObject({ type: z.string() })).optional() })
+  .loose()
+  .refine((d) => JSON.stringify(d).length <= MAX_DOC_BYTES, "เนื้อหายาวเกินไป");
+
+// " AI, ai,Ml" -> ["ai","ml"]
+export function normalizeTags(tags: string[]): string[] {
+  return [...new Set(tags.map((t) => t.trim().toLowerCase()).filter(Boolean))];
+}
+
+export const postSchema = withBilingual(
+  {
+    slug: z.string().trim().max(80),
+    cover_path: z.string().max(200),
+    tags: z
+      .array(z.string())
+      .transform(normalizeTags)
+      .pipe(
+        z
+          .array(z.string().max(MAX_TAG_LENGTH, "แท็กยาวได้ไม่เกิน 30 ตัวอักษร"))
+          .max(MAX_TAGS, "เพิ่มแท็กได้ไม่เกิน 10 รายการ"),
+      ),
+    content_th: tiptapDocSchema.nullable(),
+    content_en: tiptapDocSchema.nullable(),
+  },
+  [
+    { name: "title", required: true, max: 160 },
+    { name: "excerpt", required: false, max: 300 },
+  ],
+).transform((v): PostInput => {
+  const r = v as unknown as PostInput;
+  return { ...r, slug: slugify(r.slug || r.title_en || r.title_th, "post") };
+});
+
+export type PostInput = Bi<"title"> &
+  Bi<"excerpt"> & {
+    slug: string;
+    cover_path: string;
+    tags: string[];
+    content_th: { type: "doc" } | null;
+    content_en: { type: "doc" } | null;
+  };
+
 // withBilingual builds its shape dynamically, so the parsed output is loosely typed.
 // These mirror the schemas above; actions cast parsed.data to them.
 type Bi<N extends string> = Record<`${N}_th` | `${N}_en`, string>;
@@ -119,8 +165,6 @@ export type ProfileInput = Bi<"full_name"> &
   Bi<"location"> & {
     email: string;
     github_username: string;
-    bio_th: string;
-    bio_en: string;
     links: z.infer<typeof linkSchema>[];
     avatar_path: string;
     resume_path_th: string;

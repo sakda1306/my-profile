@@ -2,8 +2,8 @@ import { ActionForm } from "@/components/admin/ActionForm";
 import { BilingualField } from "@/components/admin/BilingualField";
 import { LinksEditor, type LinkRow } from "@/components/admin/LinksEditor";
 import { MediaUpload } from "@/components/admin/MediaUpload";
+import { asDoc } from "@/lib/admin/doc-field";
 import { requireAdmin } from "@/lib/auth/require-admin";
-import { docToPlain } from "@/lib/richtext/plain";
 import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { saveProfile } from "./actions";
 
@@ -23,7 +23,7 @@ export default async function ProfilePage() {
         <BilingualField name="headline" label="คำโปรย" translateEnabled={translateEnabled} defaultTh={p?.headline_th} defaultEn={p?.headline_en} />
         <BilingualField name="university" label="มหาวิทยาลัย" translateEnabled={translateEnabled} defaultTh={p?.university_th} defaultEn={p?.university_en} />
         <BilingualField name="location" label="ที่อยู่" translateEnabled={translateEnabled} defaultTh={p?.location_th} defaultEn={p?.location_en} />
-        <BilingualField name="bio" label="เกี่ยวกับฉัน" kind="richtext" translateEnabled={translateEnabled} defaultTh={docToPlain(p?.bio_th)} defaultEn={docToPlain(p?.bio_en)} />
+        <BilingualField name="bio" label="เกี่ยวกับฉัน" kind="richtext" imageFolder="profile" translateEnabled={translateEnabled} defaultDocTh={asDoc(p?.bio_th)} defaultDocEn={asDoc(p?.bio_en)} />
         <div className="grid gap-3 md:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-sm text-muted">อีเมล</span>
