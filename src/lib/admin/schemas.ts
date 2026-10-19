@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { withBilingual } from "@/lib/admin/bilingual";
+import { slugify } from "@/lib/admin/slugify";
 import { httpUrl, linkUrl } from "@/lib/admin/url-schema";
 
 const emptyOr = <T extends z.ZodType>(s: T) => z.union([z.literal(""), s]);
@@ -68,6 +69,47 @@ export const certificateSchema = withBilingual(
   }
 });
 
+export const MAX_STACK = 15;
+
+// "a, b,,c" -> ["a","b","c"]
+export function parseStack(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+export const projectSchema = withBilingual(
+  {
+    slug: z.string().trim().max(80),
+    stack: z.array(z.string().trim().min(1).max(40)).max(MAX_STACK, "เพิ่มเทคโนโลยีได้ไม่เกิน 15 รายการ"),
+    repo_url: httpUrl({ optional: true }),
+    demo_url: httpUrl({ optional: true }),
+    cover_path: z.string(),
+    is_featured: z.boolean(),
+    start_date: emptyOr(z.iso.date("วันที่ไม่ถูกต้อง")),
+    end_date: emptyOr(z.iso.date("วันที่ไม่ถูกต้อง")),
+  },
+  [
+    { name: "title", required: true, max: 120 },
+    { name: "summary", required: false, max: 300 },
+    { name: "my_role", required: false, max: 300 },
+  ],
+)
+  .superRefine((v, ctx) => {
+    if (v.start_date && v.end_date && v.end_date < v.start_date) {
+      ctx.addIssue({
+        code: "custom",
+        message: "วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่ม",
+        path: ["end_date"],
+      });
+    }
+  })
+  .transform((v) => {
+    const r = v as Record<string, unknown> & { slug: string; title_en: string; title_th: string };
+    return { ...r, slug: slugify(r.slug || r.title_en || r.title_th, "project") };
+  });
+
 // withBilingual builds its shape dynamically, so the parsed output is loosely typed.
 // These mirror the schemas above; actions cast parsed.data to them.
 type Bi<N extends string> = Record<`${N}_th` | `${N}_en`, string>;
@@ -98,3 +140,15 @@ export type CertificateInput = Bi<"title"> & {
   image_path: string;
   file_path: string;
 };
+export type ProjectInput = Bi<"title"> &
+  Bi<"summary"> &
+  Bi<"my_role"> & {
+    slug: string;
+    stack: string[];
+    repo_url: string;
+    demo_url: string;
+    cover_path: string;
+    is_featured: boolean;
+    start_date: string;
+    end_date: string;
+  };
