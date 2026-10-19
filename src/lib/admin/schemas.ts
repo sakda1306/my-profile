@@ -17,6 +17,7 @@ export const profileSchema = withBilingual(
     github_username: z.string().trim().max(60),
     links: z.array(linkSchema).max(10, "เพิ่มลิงก์ได้ไม่เกิน 10 รายการ"),
     avatar_path: z.string(),
+    hero_image_path: z.string(),
     resume_path_th: z.string(),
     resume_path_en: z.string(),
   },
@@ -25,6 +26,7 @@ export const profileSchema = withBilingual(
     { name: "headline", required: false, max: 160 },
     { name: "university", required: false, max: 160 },
     { name: "location", required: false, max: 160 },
+    { name: "hero_badge", required: false, max: 24 },
   ],
 );
 
@@ -162,11 +164,13 @@ type Bi<N extends string> = Record<`${N}_th` | `${N}_en`, string>;
 export type ProfileInput = Bi<"full_name"> &
   Bi<"headline"> &
   Bi<"university"> &
-  Bi<"location"> & {
+  Bi<"location"> &
+  Bi<"hero_badge"> & {
     email: string;
     github_username: string;
     links: z.infer<typeof linkSchema>[];
     avatar_path: string;
+    hero_image_path: string;
     resume_path_th: string;
     resume_path_en: string;
   };

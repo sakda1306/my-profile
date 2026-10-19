@@ -1,4 +1,5 @@
-@theme {
+/* Default (light) tokens: the admin panel uses these. */
+@theme static {
   --color-bg: #ffffff;
   --color-fg: #171717;
   --color-muted: #6b7280;
@@ -7,7 +8,39 @@
   --color-border: #e5e7eb;
   --color-danger: #b91c1c;
   --color-on-accent: #ffffff;
+  /* Poster / night palette (public site). */
+  --color-night: #070b22;
+  --color-night-deep: #04061a;
+  --color-indigo: #2a2f8f;
+  --color-indigo-deep: #0b1238;
+  --color-violet: #3b2a86;
+  --color-ember: #ff8a2b;
+  --color-ember-hot: #ffd27a;
+  --color-smoke: #7a8cff;
+  --color-ghost: rgb(255 255 255 / 0.07);
+  --color-steel: #646973;
+  --color-mist: #bbccd7;
+  --color-ice: #d7e2ea;
+  --color-paper: #ffffff;
+  --color-ink: #0c0c0c;
   --font-sans: var(--font-noto-sans-thai), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans);
   --radius-card: 0.75rem;
+  --radius-poster: 1.375rem;
   --space-section: 4rem;
+  --shadow-poster: 0 30px 80px rgb(0 0 0 / 0.55);
+}
+
+/* Public site: dark blue "night" theme. Same token names, so every component follows. */
+[data-theme="night"] {
+  --color-bg: #070b22;
+  --color-fg: #eef1ff;
+  --color-muted: #a9b2e6;
+  --color-accent: #ff8a2b;
+  --color-on-accent: #1a0d00;
+  --color-surface: rgb(20 28 92 / 0.45);
+  --color-border: rgb(255 255 255 / 0.12);
+  --color-danger: #ff7a7a;
+  --font-sans: var(--font-kanit), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-kanit), ui-sans-serif, sans-serif;
 }

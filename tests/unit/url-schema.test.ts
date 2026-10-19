@@ -35,7 +35,7 @@ describe("schemas use them", () => {
     expect(certificateSchema.safeParse({ ...cert, credential_url: "javascript:alert(1)" }).success).toBe(false));
   it("credential_url empty ok", () =>
     expect(certificateSchema.safeParse({ ...cert, credential_url: "" }).success).toBe(true));
-  const prof = { full_name_th: "ก", full_name_en: "", headline_th: "", headline_en: "", university_th: "", university_en: "", location_th: "", location_en: "", email: "", github_username: "", bio_th: "", bio_en: "", avatar_path: "", resume_path_th: "", resume_path_en: "" };
+  const prof = { full_name_th: "ก", full_name_en: "", headline_th: "", headline_en: "", university_th: "", university_en: "", location_th: "", location_en: "", email: "", github_username: "", bio_th: "", bio_en: "", avatar_path: "", hero_image_path: "", hero_badge_th: "", hero_badge_en: "", resume_path_th: "", resume_path_en: "" };
   it("profile link rejects data:", () =>
     expect(profileSchema.safeParse({ ...prof, links: [{ label: "a", url: "data:text/html,x", icon: "" }] }).success).toBe(false));
   it("profile link accepts mailto", () =>

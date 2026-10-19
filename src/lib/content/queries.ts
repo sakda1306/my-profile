@@ -25,6 +25,7 @@ export type HomeData = {
   certificates: Certificate[];
   posts: Post[];
   itemsBySection: Record<string, SectionItem[]>;
+  imagesByProject: Record<string, ProjectImage[]>;
 };
 
 export type SlugRow = { slug: string } & Record<string, unknown>;
@@ -56,7 +57,7 @@ function one<T>(res: { data: T; error: { message: string } | null }): T {
 // ---- Plain loaders: take a client, so the same code serves cached and live reads. ----
 
 async function loadHome(db: Client): Promise<HomeData> {
-  const [profile, sections, skills, projects, certificates, posts, items] = await Promise.all([
+  const [profile, sections, skills, projects, certificates, posts, items, projectImages] = await Promise.all([
     db.from("profile").select("*").maybeSingle(),
     db.from("sections").select("*").order("sort_order"),
     db.from("skills").select("*").order("sort_order"),
@@ -68,9 +69,12 @@ async function loadHome(db: Client): Promise<HomeData> {
       .order("published_at", { ascending: false, nullsFirst: true })
       .limit(LATEST_POSTS_FETCH),
     db.from("section_items").select("*").order("sort_order"),
+    db.from("project_images").select("*").order("sort_order"),
   ]);
   const itemsBySection: Record<string, SectionItem[]> = {};
   for (const item of rows(items)) (itemsBySection[item.section_id] ??= []).push(item);
+  const imagesByProject: Record<string, ProjectImage[]> = {};
+  for (const img of rows(projectImages)) (imagesByProject[img.project_id] ??= []).push(img);
   return {
     profile: one(profile),
     sections: rows(sections),
@@ -79,6 +83,7 @@ async function loadHome(db: Client): Promise<HomeData> {
     certificates: rows(certificates),
     posts: rows(posts),
     itemsBySection,
+    imagesByProject,
   };
 }
 

@@ -9,6 +9,9 @@ import { saveProfile } from "./actions";
 
 const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function ProfilePage() {
   const { supabase } = await requireAdmin();
   const { data: p } = await supabase.from("profile").select("*").eq("id", true).maybeSingle();
@@ -23,6 +26,7 @@ export default async function ProfilePage() {
         <BilingualField name="headline" label="คำโปรย" translateEnabled={translateEnabled} defaultTh={p?.headline_th} defaultEn={p?.headline_en} />
         <BilingualField name="university" label="มหาวิทยาลัย" translateEnabled={translateEnabled} defaultTh={p?.university_th} defaultEn={p?.university_en} />
         <BilingualField name="location" label="ที่อยู่" translateEnabled={translateEnabled} defaultTh={p?.location_th} defaultEn={p?.location_en} />
+        <BilingualField name="hero_badge" label="ป้ายยศในหน้าแรก (เช่น S RANK)" translateEnabled={translateEnabled} defaultTh={p?.hero_badge_th} defaultEn={p?.hero_badge_en} />
         <BilingualField name="bio" label="เกี่ยวกับฉัน" kind="richtext" imageFolder="profile" translateEnabled={translateEnabled} defaultDocTh={asDoc(p?.bio_th)} defaultDocEn={asDoc(p?.bio_en)} />
         <div className="grid gap-3 md:grid-cols-2">
           <label className="block">
@@ -38,6 +42,11 @@ export default async function ProfilePage() {
         <fieldset className="space-y-2">
           <legend className="font-medium">รูปโปรไฟล์</legend>
           <MediaUpload name="avatar_path" folder="profile" defaultPath={p?.avatar_path} />
+        </fieldset>
+        <fieldset className="space-y-2">
+          <legend className="font-medium">รูปหน้าแรก (โปสเตอร์)</legend>
+          <p className="text-sm text-muted">ใช้รูปที่ตัดพื้นหลังออกแล้ว (PNG หรือ WebP พื้นใส) คนอยู่กลางภาพ ถ้าไม่ใส่จะใช้รูปโปรไฟล์แทน</p>
+          <MediaUpload name="hero_image_path" folder="profile" defaultPath={p?.hero_image_path} />
         </fieldset>
         <div className="grid gap-4 md:grid-cols-2">
           <fieldset className="space-y-2">

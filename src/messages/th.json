@@ -2,7 +2,10 @@
   "nav": {
     "home": "หน้าแรก",
     "projects": "โปรเจกต์",
-    "blog": "บล็อก"
+    "blog": "บล็อก",
+    "about": "เกี่ยวกับ",
+    "skills": "ความสามารถ",
+    "contact": "ติดต่อ"
   },
   "language": {
     "switch": "English"
@@ -29,7 +32,9 @@
   },
   "hero": {
     "resume": "ดูเรซูเม่",
-    "contact": "ติดต่อ"
+    "contact": "ติดต่อ",
+    "greeting": "Hi, i’m {name}",
+    "aboutTitle": "เกี่ยวกับฉัน"
   },
   "skillCategory": {
     "language": "ภาษาโปรแกรม",
@@ -65,5 +70,11 @@
     "errorTitle": "เกิดข้อผิดพลาด",
     "errorBody": "ขออภัย โหลดหน้านี้ไม่สำเร็จ ลองใหม่อีกครั้ง",
     "retry": "ลองใหม่"
+  },
+  "projectCard": {
+    "live": "Live Project",
+    "code": "GitHub",
+    "details": "ดูรายละเอียด",
+    "noImage": "ยังไม่มีรูป"
   }
 }

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run tests/unit",
     "seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "hero-image": "tsx --env-file=.env.local scripts/set-hero-image.ts",
     "test:rls": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "@tiptap/pm": "^3.32.0",
     "@tiptap/react": "^3.32.0",
     "@tiptap/starter-kit": "^3.32.0",
+    "framer-motion": "^12.43.0",
     "next": "16.4.2",
     "next-intl": "^4.14.9",
     "react": "19.3.0",

@@ -11,6 +11,9 @@ import { PostStatusButton } from "../PostStatusButton";
 const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { supabase } = await requireAdmin();
   const { id } = await params;

@@ -4,6 +4,9 @@ import { isTranslateEnabled } from "@/lib/translate/gemini";
 import { SkillForm } from "./SkillForm";
 import { SkillGroup } from "./SkillGroup";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function SkillsPage() {
   const { supabase } = await requireAdmin();
   const { data } = await supabase

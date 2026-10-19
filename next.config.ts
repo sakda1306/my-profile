@@ -9,6 +9,8 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Dev only: lets a phone on the home network (http://192.168.x.x:3000) load the dev scripts.
+  allowedDevOrigins: ["192.168.*.*"],
   // Off so unknown slugs answer 404 on the first request (the app-shell fallback streamed 200 first).
   partialPrefetching: false,
   images: {

@@ -3,6 +3,9 @@ import { previewHref } from "@/lib/admin/preview-link";
 import { AddSectionForm } from "./AddSectionForm";
 import { SectionList } from "./SectionList";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function SectionsPage() {
   const { supabase } = await requireAdmin();
   const { data } = await supabase

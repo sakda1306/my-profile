@@ -2,7 +2,10 @@
   "nav": {
     "home": "Home",
     "projects": "Projects",
-    "blog": "Blog"
+    "blog": "Blog",
+    "about": "About",
+    "skills": "Skills",
+    "contact": "Contact"
   },
   "language": {
     "switch": "ไทย"
@@ -29,7 +32,9 @@
   },
   "hero": {
     "resume": "View resume",
-    "contact": "Contact me"
+    "contact": "Contact me",
+    "greeting": "Hi, i’m {name}",
+    "aboutTitle": "About me"
   },
   "skillCategory": {
     "language": "Languages",
@@ -65,5 +70,11 @@
     "errorTitle": "Something went wrong",
     "errorBody": "Sorry, this page could not be loaded. Please try again.",
     "retry": "Try again"
+  },
+  "projectCard": {
+    "live": "Live Project",
+    "code": "GitHub",
+    "details": "Details",
+    "noImage": "No image yet"
   }
 }

@@ -40,6 +40,9 @@ const profile = {
   bio_en: "",
   links: [],
   avatar_path: "",
+  hero_image_path: "",
+  hero_badge_th: "",
+  hero_badge_en: "",
   resume_path_th: "",
   resume_path_en: "",
 };
@@ -72,6 +75,10 @@ describe("skillSchema", () => {
 
 describe("profileSchema", () => {
   it("accepts valid", () => expect(profileSchema.safeParse(profile).success).toBe(true));
+  it("accepts a hero badge up to 24 characters", () =>
+    expect(profileSchema.safeParse({ ...profile, hero_badge_en: "S RANK", hero_badge_th: "ก".repeat(24) }).success).toBe(true));
+  it("rejects a hero badge over 24 characters", () =>
+    expect(profileSchema.safeParse({ ...profile, hero_badge_en: "x".repeat(25) }).success).toBe(false));
   it("rejects invalid link url", () =>
     expect(
       profileSchema.safeParse({ ...profile, links: [{ label: "a", url: "x", icon: "" }] }).success,
