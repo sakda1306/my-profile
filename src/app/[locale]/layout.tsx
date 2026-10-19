@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Thai } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/public/LanguageSwitcher";
+import { notoSansThai } from "@/app/fonts";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
-
-const notoSansThai = Noto_Sans_Thai({
-  variable: "--font-noto-sans-thai",
-  subsets: ["thai", "latin"],
-});
 
 export const metadata: Metadata = {
   title: "My Profile",

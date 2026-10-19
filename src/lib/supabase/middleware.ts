@@ -27,6 +27,16 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
+
+  // Signed-out visitors get a real 307 for panel pages (the layout guard
+  // can only redirect inside a streamed response, which stays 200).
+  const { pathname } = request.nextUrl;
+  const isLogin = pathname === "/admin/login" || pathname.startsWith("/admin/login/");
+  if (!data.user && !isLogin) {
+    const redirect = NextResponse.redirect(new URL("/admin/login", request.url));
+    response.cookies.getAll().forEach((c) => redirect.cookies.set(c));
+    return redirect;
+  }
   return response;
 }
