@@ -1,0 +1,17 @@
+{
+  "nav": { "home": "หน้าแรก", "projects": "โปรเจกต์", "blog": "บล็อก" },
+  "language": { "switch": "English" },
+  "sections": {
+    "skills": "ทักษะ",
+    "projects": "โปรเจกต์",
+    "certificates": "ใบรับรอง",
+    "latestPosts": "บทความล่าสุด",
+    "contact": "ติดต่อ"
+  },
+  "fallback": { "badge": "มีเฉพาะภาษาอังกฤษ" },
+  "preview": {
+    "banner": "โหมดตัวอย่าง: กำลังดูเนื้อหาที่ยังไม่เผยแพร่",
+    "exit": "ออกจากโหมดตัวอย่าง"
+  },
+  "home": { "title": "โปรไฟล์ของฉัน" }
+}

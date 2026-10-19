@@ -1,0 +1,17 @@
+{
+  "nav": { "home": "Home", "projects": "Projects", "blog": "Blog" },
+  "language": { "switch": "ไทย" },
+  "sections": {
+    "skills": "Skills",
+    "projects": "Projects",
+    "certificates": "Certificates",
+    "latestPosts": "Latest posts",
+    "contact": "Contact"
+  },
+  "fallback": { "badge": "Available in Thai only" },
+  "preview": {
+    "banner": "Preview mode: viewing unpublished content",
+    "exit": "Exit preview"
+  },
+  "home": { "title": "My Profile" }
+}
