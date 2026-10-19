@@ -1,5 +1,8 @@
 import { requireAdmin } from "@/lib/auth/require-admin";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function AdminDashboardPage() {
   await requireAdmin();
   return (

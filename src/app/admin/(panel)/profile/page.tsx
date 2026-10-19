@@ -9,6 +9,9 @@ import { saveProfile } from "./actions";
 
 const input = "w-full rounded-card border border-border bg-bg px-3 py-2 text-fg";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function ProfilePage() {
   const { supabase } = await requireAdmin();
   const { data: p } = await supabase.from("profile").select("*").eq("id", true).maybeSingle();

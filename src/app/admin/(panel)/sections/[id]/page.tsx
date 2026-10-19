@@ -20,6 +20,9 @@ const SYSTEM_NOTE: Record<string, string> = {
   contact: "ลิงก์ติดต่อแก้ได้ที่หน้า โปรไฟล์",
 };
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function SectionPage({ params }: { params: Promise<{ id: string }> }) {
   const { supabase } = await requireAdmin();
   const { id } = await params;

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { ProjectList } from "./ProjectList";
 
+// Every admin page reads the session per request, so navigations block on the server.
+export const instant = false;
+
 export default async function ProjectsPage() {
   const { supabase } = await requireAdmin();
   const { data } = await supabase
