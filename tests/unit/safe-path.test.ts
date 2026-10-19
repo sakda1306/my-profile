@@ -22,3 +22,14 @@ describe("safeRedirectPath", () => {
     for (const p of bad) expect(safeRedirectPath(p)).toBe("/th");
   });
 });
+
+describe("safeRedirectPath normalization", () => {
+  it("rejects dot-segment tricks that normalize to a protocol-relative path", () => {
+    const bs = String.fromCharCode(92);
+    const bad = ["/a/..//evil.com", "/.//evil.com", "/x/%2e%2e//evil.com", "/a/../" + bs + "evil.com"];
+    for (const p of bad) expect(safeRedirectPath(p)).toBe("/th");
+  });
+  it("passes a normal path with query and hash unchanged", () => {
+    expect(safeRedirectPath("/th/blog/x?y=1#z")).toBe("/th/blog/x?y=1#z");
+  });
+});
