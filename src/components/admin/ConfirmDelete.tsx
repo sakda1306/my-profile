@@ -37,14 +37,14 @@ export function ConfirmDelete({
       <button
         type="button"
         onClick={() => dialog.current?.showModal()}
-        className="rounded-card border border-border px-3 py-1 text-sm text-red-600"
+        className="rounded-card border border-border px-3 py-1 text-sm text-danger"
       >
         ลบ
       </button>
       <dialog ref={dialog} className="m-auto rounded-card border border-border bg-bg p-6 text-fg">
         <p className="mb-4">ยืนยันการลบ{label}? การลบไม่สามารถย้อนกลับได้</p>
         {error ? (
-          <p role="alert" className="mb-2 text-sm text-red-600">
+          <p role="alert" className="mb-2 text-sm text-danger">
             {error}
           </p>
         ) : null}
@@ -60,7 +60,7 @@ export function ConfirmDelete({
             type="button"
             disabled={pending}
             onClick={confirm}
-            className="rounded-card bg-red-600 px-3 py-1 text-white disabled:opacity-50"
+            className="rounded-card bg-danger px-3 py-1 text-on-accent disabled:opacity-50"
           >
             {pending ? "กำลังลบ..." : "ลบ"}
           </button>

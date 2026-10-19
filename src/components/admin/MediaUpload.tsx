@@ -55,7 +55,7 @@ export function MediaUpload({
         {path ? (
           <button
             type="button"
-            className="text-sm text-red-600"
+            className="text-sm text-danger"
             onClick={() => {
               setPath(null);
               onChange?.(null);
@@ -67,7 +67,7 @@ export function MediaUpload({
       </div>
       {busy ? <p className="text-sm text-muted">กำลังอัปโหลด...</p> : null}
       {error ? (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       ) : null}

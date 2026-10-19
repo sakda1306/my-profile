@@ -89,7 +89,7 @@ export function SortableList<T extends { id: string }>({
   return (
     <div>
       {error ? (
-        <p role="alert" className="mb-2 text-sm text-red-600">
+        <p role="alert" className="mb-2 text-sm text-danger">
           {error}
         </p>
       ) : null}

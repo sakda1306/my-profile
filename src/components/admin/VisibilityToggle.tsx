@@ -43,7 +43,7 @@ export function VisibilityToggle({
         {visible ? "แสดง" : "ซ่อน"}
       </button>
       {error ? (
-        <span role="alert" className="text-sm text-red-600">
+        <span role="alert" className="text-sm text-danger">
           {error}
         </span>
       ) : null}
