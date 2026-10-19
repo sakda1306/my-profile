@@ -3,6 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BlogList, type PostCard } from "@/components/public/BlogList";
+import { TagFilter } from "@/components/public/TagFilter";
 import { routing } from "@/i18n/routing";
 import { formatDate } from "@/lib/content/format";
 import { getPosts } from "@/lib/content/queries";
@@ -27,10 +28,11 @@ export default async function BlogPage({ params }: PageProps<"/[locale]/blog">) 
   });
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8">
-      {/* useSearchParams in BlogList needs a boundary; the page itself stays static. */}
+      {/* Only the small client filter needs a boundary; the list itself is server-rendered. */}
       <Suspense>
-        <BlogList cards={cards} locale={locale} />
+        <TagFilter />
       </Suspense>
+      <BlogList cards={cards} locale={locale} />
     </main>
   );
 }

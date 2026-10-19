@@ -1,9 +1,6 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { FallbackBadge } from "@/components/public/FallbackBadge";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 
 export type PostCard = {
   slug: string;
@@ -14,53 +11,41 @@ export type PostCard = {
   tags: string[];
 };
 
-// Tag filtering happens here, from ?tag=, so the /blog route itself stays static.
-export function BlogList({ cards, locale }: { cards: PostCard[]; locale: string }) {
+// Server component: the full list and the tag links are in the static HTML.
+// TagFilter (client, ?tag=) only hides non-matching cards afterwards.
+export function BlogList({ cards, locale }: { cards: PostCard[]; locale: "th" | "en" }) {
   const t = useTranslations("blog");
-  const params = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const tag = params.get("tag");
   const allTags = [...new Set(cards.flatMap((c) => c.tags))].sort();
-  const shown = tag ? cards.filter((c) => c.tags.includes(tag)) : cards;
-
-  function select(next: string | null) {
-    router.replace(next ? `${pathname}?tag=${encodeURIComponent(next)}` : pathname, { locale });
-  }
-
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{t("title")}</h1>
       {allTags.length > 0 ? (
         <ul className="flex flex-wrap gap-2 text-sm">
           <li>
-            <button
-              type="button"
-              onClick={() => select(null)}
-              className={`rounded-card border border-border px-3 py-1 ${tag ? "" : "bg-accent text-on-accent"}`}
-            >
+            <Link href="/blog" locale={locale} className="rounded-card border border-border px-3 py-1">
               {t("all")}
-            </button>
+            </Link>
           </li>
           {allTags.map((x) => (
             <li key={x}>
-              <button
-                type="button"
-                onClick={() => select(x)}
-                className={`rounded-card border border-border px-3 py-1 ${tag === x ? "bg-accent text-on-accent" : ""}`}
+              <Link
+                href={{ pathname: "/blog", query: { tag: x } }}
+                locale={locale}
+                data-tag-link={x}
+                className="rounded-card border border-border px-3 py-1"
               >
                 {x}
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
       ) : null}
-      {shown.length === 0 ? <p className="text-muted">{t("empty")}</p> : null}
-      <ul className="space-y-6">
-        {shown.map((c) => (
-          <li key={c.slug}>
+      {cards.length === 0 ? <p className="text-muted">{t("empty")}</p> : null}
+      <ul className="space-y-6" id="post-list">
+        {cards.map((c) => (
+          <li key={c.slug} data-tags={`|${c.tags.join("|")}|`}>
             <h2 className="text-xl font-semibold">
-              <Link href={`/blog/${c.slug}`} locale={locale as "th" | "en"}>
+              <Link href={`/blog/${c.slug}`} locale={locale}>
                 {c.title}
               </Link>
               {c.isFallback ? <FallbackBadge /> : null}
