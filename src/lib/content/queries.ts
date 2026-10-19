@@ -160,8 +160,8 @@ export async function getAllSlugs(): Promise<{ projects: SlugRow[]; posts: SlugR
   cacheLife("max");
   const db = createPublicClient();
   const [projects, posts] = await Promise.all([
-    db.from("projects").select("slug,title_th,title_en,body_th,body_en"),
-    db.from("posts").select("slug,title_th,title_en,content_th,content_en"),
+    db.from("projects").select("slug,updated_at,title_th,title_en,summary_th,summary_en"),
+    db.from("posts").select("slug,updated_at,title_th,title_en,content_th,content_en"),
   ]);
   return { projects: rows(projects) as SlugRow[], posts: rows(posts) as SlugRow[] };
 }

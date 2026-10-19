@@ -8,6 +8,17 @@ import { routing } from "@/i18n/routing";
 import { formatDate } from "@/lib/content/format";
 import { getPosts } from "@/lib/content/queries";
 import { pick } from "@/lib/locale/pick";
+import { ALL_OWN } from "@/lib/seo/alternates";
+import { buildMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/blog">): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) return {};
+  const t = await getTranslations({ locale, namespace: "nav" });
+  return buildMetadata({ path: "/blog", own: ALL_OWN, locale, title: t("blog") });
+}
 
 export default async function BlogPage({ params }: PageProps<"/[locale]/blog">) {
   const { locale } = await params;

@@ -9,7 +9,9 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { safeHref } from "@/lib/content/format";
 import { getAllSlugs, getProjectBySlug, type ProjectDetail } from "@/lib/content/queries";
-import { pick, type Locale } from "@/lib/locale/pick";
+import { hasOwnContent, pick, type Locale } from "@/lib/locale/pick";
+import { buildMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import type { TiptapDoc } from "@/lib/richtext/texts";
 
 export async function generateStaticParams() {
@@ -17,6 +19,25 @@ export async function generateStaticParams() {
   const params = routing.locales.flatMap((locale) => projects.map((p) => ({ locale, slug: p.slug })));
   // Cache Components needs at least one entry; the placeholder renders a 404.
   return params.length > 0 ? params : routing.locales.map((locale) => ({ locale, slug: "_" }));
+}
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/projects/[slug]">): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!hasLocale(routing.locales, locale)) return {};
+  const detail = await getProjectBySlug(slug);
+  if (!detail) return {};
+  const { project } = detail;
+  return buildMetadata({
+    path: `/projects/${slug}`,
+    own: {
+      th: hasOwnContent(project, ["title", "summary"], "th"),
+      en: hasOwnContent(project, ["title", "summary"], "en"),
+    },
+    locale,
+    title: String(pick(project, "title", locale).value ?? slug),
+    description: String(pick(project, "summary", locale).value ?? ""),
+    imagePath: project.cover_path,
+  });
 }
 
 function Project({ detail, locale }: { detail: ProjectDetail; locale: Locale }) {
